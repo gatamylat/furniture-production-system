@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Система управления мебельным производством</title>
+    <style>
+        /* Цветовая схема в стиле Планфикс */
+        :root {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f7f8fa;
+            --bg-card: #ffffff;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --border: #e1e4e8;
+            --shadow: rgba(0,0,0,0.08);
+            
+            /* Цвета процессов в стиле Планфикс */
+            --color-sales: #f39c12;
+            --color-design: #27ae60;
+            --color-production: #3498db;
+            --color-claims: #e74c3c;
+            --color-samples: #2ecc71;
+            --color-finance: #2980b9;
+            --color-storage: #9b59b6;
+            --color-neutral: #95a5a6;
+            --planfix-blue: #4a90e2;
+            --planfix-green: #5cb85c;
+            --planfix-orange: #f0ad4e;
+            --planfix-red: #d9534f;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-secondary);
+            color: var(--text-primary);
+            line-height: 1.5;
+        }
+
+        /* Шапка в стиле Планфикс */
+        .header {
+            background-color: #fff;
+            border-bottom: 1px solid var(--border);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 100;
+            height: 60px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .logo-icon {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(135deg, var(--planfix-blue), var(--planfix-green));
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 18px;
+        }
+
+        .logo-text {
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        /* Основной контент */
+        .main-content {
+            margin-top: 60px;
+            margin-bottom: 60px;
+            padding: 30px;
+            min-height: calc(100vh - 120px);
+            max-width: 1400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .page-title {
+            font-size: 24px;
+            font-weight: 500;
+            margin-bottom: 25px;
+            color: var(--text-primary);
+        }
+
+        /* Табы навигации в стиле Планфикс */
+        .tabs {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: #fff;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+            z-index: 100;
+            height: 60px;
+            box-shadow: 0 -1px 3px rgba(0,0,0,0.05);
+        }
+
+        .tab {
+            flex: 0 1 200px;
+            padding: 8px 15px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+            background: none;
+            color: var(--text-secondary);
+            text-decoration: none;
+            position: relative;
+        }
+
+        .tab:hover {
+            background-color: var(--bg-secondary);
+        }
+
+        .tab.active {
+            color: var(--planfix-blue);
+        }
+
+        .tab.active::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 20%;
+            right: 20%;
+            height: 3px;
+            background-color: var(--planfix-blue);
+        }
+
+        .tab-icon {
+            width: 24px;
+            height: 24px;
+            margin-bottom: 4px;
+            border-radius: 4px;
+        }
+
+        .tab-text {
+            font-size: 12px;
+            white-space: nowrap;
+        }
+
+        /* SVG схема процессов */
+        .process-diagram {
+            background: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+        }
+
+        .process-svg {
+            width: 100%;
+            height: 400px;
+            max-width: 1200px;
+        }
+
+        /* Канбан доски в стиле Планфикс */
+        .kanban-board {
+            display: flex;
+            gap: 20px;
+            overflow-x: auto;
+            padding: 20px 0;
+            background: #fff;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+        }
+
+        .kanban-column {
+            min-width: 280px;
+            background: var(--bg-secondary);
+            border-radius: 6px;
+            padding: 15px;
+        }
+
+        .kanban-header {
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 4px;
+            text-align: center;
+            color: white;
+            font-size: 14px;
+        }
+
+        .kanban-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            padding: 12px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .kanban-card:hover {
+            box-shadow: 0 3px 8px rgba(0,0,0,0.12);
+            transform: translateY(-1px);
+        }
+
+        .kanban-card-title {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 5px;
+            color: var(--text-primary);
+        }
+
+        .kanban-card-info {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-bottom: 3px;
+        }
+
+        .kanban-card-meta {
+            font-size: 11px;
+            color: #95a5a6;
+        }
+
+        /* Кнопки в стиле Планфикс */
+        .btn {
+            padding: 10px 20px;
+            background: var(--planfix-blue);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: all 0.2s ease;
+            margin: 10px 0;
+        }
+
+        .btn:hover {
+            background: #357abd;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+        }
+
+        /* Карточки в стиле Планфикс */
+        .card {
+            background: #fff;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .card-title {
+            font-size: 18px;
+            font-weight: 500;
+            margin-bottom: 20px;
+            color: var(--text-primary);
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 10px;
+        }
+
+        /* Таблицы в стиле Планфикс */
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+
+        .table th,
+        .table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            font-size: 14px;
+        }
+
+        .table th {
+            background: var(--bg-secondary);
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .table tr:hover {
+            background: var(--bg-secondary);
+        }
+
+        /* График Gantt в стиле Планфикс */
+        .gantt-chart {
+            overflow-x: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+        }
+
+        .gantt-header {
+            display: flex;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+
+        .gantt-row {
+            display: flex;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .gantt-label {
+            min-width: 180px;
+            padding-right: 20px;
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .gantt-timeline {
+            display: flex;
+            flex: 1;
+            position: relative;
+            height: 35px;
+            align-items: center;
+        }
+
+        .gantt-bar {
+            height: 30px;
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            padding: 0 10px;
+            color: white;
+            font-size: 12px;
+            white-space: nowrap;
+            position: absolute;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+        }
+
+        /* Форма в стиле Планфикс */
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            background: #fff;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--planfix-blue);
+        }
+
+        /* Прогресс бар в стиле Планфикс */
+        .progress-bar {
+            width: 100%;
+            height: 24px;
+            background: #ecf0f1;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--planfix-green), var(--planfix-blue));
+            border-radius: 4px;
+            transition: width 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        /* Информационный блок */
+        .info-block {
+            background: #f0f8ff;
+            border-left: 4px solid var(--planfix-blue);
+            padding: 15px 20px;
+            margin: 20px 0;
+            border-radius: 4px;
+        }
+
+        .info-block p {
+            margin: 0;
+            color: var(--text-primary);
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <header class="header">
+        <div class="logo">
+            <div class="logo-icon">СУ</div>
+            <div class="logo-text">Система управления производством</div>
+        </div>
+    </header>
+
+    <!-- Основной контент -->
+    <main class="main-content">
+        <!-- Страница: Обзор -->
+        <div id="overview" class="page active">
+            <h1 class="page-title">Обзор системы</h1>
+            
+            <!-- Описание структуры системы -->
+            <div class="card">
+                <div class="card-title">Структура системы</div>
+                <div style="color: #2c3e50; line-height: 1.8; font-size: 14px;">
+                    <div style="margin-bottom: 15px;">
+                        <strong>Основные процессы:</strong> Система графически отображает основные процессы, происходящие в организации. К ним относятся:
+                    </div>
+                    <ul style="margin-left: 20px; margin-bottom: 15px;">
+                        <li style="margin-bottom: 8px;">Обработка входящих заявок от потенциальных клиентов.</li>
+                        <li style="margin-bottom: 8px;">Процесс проектирования изделий.</li>
+                        <li style="margin-bottom: 8px;">Процесс производства изделий и его монтажа.</li>
+                        <li style="margin-bottom: 8px;">Обработка рекламаций.</li>
+                        <li style="margin-bottom: 8px;">Дополнительный постоянный процесс изготовления выкрасов и образцов.</li>
+                    </ul>
+                </div>
+            </div>
+
+            <button class="btn" onclick="showKitchenDemo()">Показать пример: Кухня на заказ</button>
+            
+            <!-- SVG схема процессов -->
+            <div class="process-diagram">
+                <svg class="process-svg" viewBox="0 0 1200 480" style="cursor: pointer; height: 400px;">
+                    <!-- Первый уровень -->
+                    <!-- Входящие заявки -->
+                    <g onclick="switchTab('sales')" style="cursor: pointer;">
+                        <rect x="50" y="50" width="200" height="80" rx="4" fill="#f39c12" opacity="0.95"/>
+                        <text x="150" y="85" text-anchor="middle" fill="white" font-weight="600" font-size="15">Входящие заявки</text>
+                        <text x="150" y="105" text-anchor="middle" fill="white" font-size="12">Telegram, WhatsApp, Email</text>
+                    </g>
+                    
+                    <!-- Единая система хранения -->
+                    <g onclick="switchTab('storage')" style="cursor: pointer;">
+                        <rect x="500" y="50" width="200" height="80" rx="4" fill="#9b59b6" opacity="0.95"/>
+                        <text x="600" y="75" text-anchor="middle" fill="white" font-weight="600" font-size="15">Единая система</text>
+                        <text x="600" y="95" text-anchor="middle" fill="white" font-size="12">хранения информации</text>
+                        <text x="600" y="113" text-anchor="middle" fill="white" font-size="11">Заказчик/Проект/Договор</text>
+                    </g>
+                    
+                    <!-- Финансовая отчетность -->
+                    <g onclick="switchTab('finance')" style="cursor: pointer;">
+                        <rect x="950" y="50" width="200" height="80" rx="4" fill="#2980b9" opacity="0.95"/>
+                        <text x="1050" y="85" text-anchor="middle" fill="white" font-weight="600" font-size="15">Финансовая</text>
+                        <text x="1050" y="105" text-anchor="middle" fill="white" font-size="12">отчетность</text>
+                    </g>
+                    
+                    <!-- Второй уровень - Канбан доски -->
+                    <g onclick="switchTab('sales')" style="cursor: pointer;">
+                        <rect x="50" y="200" width="200" height="80" rx="4" fill="#f39c12" opacity="0.95"/>
+                        <text x="150" y="235" text-anchor="middle" fill="white" font-weight="600" font-size="15">Обработка заявок</text>
+                        <text x="150" y="255" text-anchor="middle" fill="white" font-size="12">Канбан-доска</text>
+                    </g>
+                    
+                    <g onclick="switchTab('design')" style="cursor: pointer;">
+                        <rect x="275" y="200" width="200" height="80" rx="4" fill="#27ae60" opacity="0.95"/>
+                        <text x="375" y="235" text-anchor="middle" fill="white" font-weight="600" font-size="15">Проектирование</text>
+                        <text x="375" y="255" text-anchor="middle" fill="white" font-size="12">Канбан-доска</text>
+                    </g>
+                    
+                    <g onclick="switchTab('production')" style="cursor: pointer;">
+                        <rect x="500" y="200" width="200" height="80" rx="4" fill="#3498db" opacity="0.95"/>
+                        <text x="600" y="235" text-anchor="middle" fill="white" font-weight="600" font-size="15">Производство</text>
+                        <text x="600" y="255" text-anchor="middle" fill="white" font-size="12">и монтаж</text>
+                    </g>
+                    
+                    <g style="cursor: pointer;">
+                        <rect x="725" y="200" width="200" height="80" rx="4" fill="#e74c3c" opacity="0.95"/>
+                        <text x="825" y="235" text-anchor="middle" fill="white" font-weight="600" font-size="15">Рекламации</text>
+                        <text x="825" y="255" text-anchor="middle" fill="white" font-size="12">Канбан-доска</text>
+                    </g>
+                    
+                    <g onclick="switchTab('samples')" style="cursor: pointer;">
+                        <rect x="950" y="200" width="200" height="80" rx="4" fill="#2ecc71" opacity="0.95"/>
+                        <text x="1050" y="235" text-anchor="middle" fill="white" font-weight="600" font-size="15">Выкрасы</text>
+                        <text x="1050" y="255" text-anchor="middle" fill="white" font-size="12">и образцы</text>
+                    </g>
+                    
+                    <!-- Третий уровень - План-графики -->
+                    <g onclick="switchTab('design')" style="cursor: pointer;">
+                        <rect x="275" y="350" width="200" height="80" rx="4" fill="#95a5a6" opacity="0.95"/>
+                        <text x="375" y="385" text-anchor="middle" fill="white" font-weight="600" font-size="15">План-график</text>
+                        <text x="375" y="405" text-anchor="middle" fill="white" font-size="12">проектирования</text>
+                    </g>
+                    
+                    <g onclick="switchTab('production')" style="cursor: pointer;">
+                        <rect x="500" y="350" width="200" height="80" rx="4" fill="#95a5a6" opacity="0.95"/>
+                        <text x="600" y="385" text-anchor="middle" fill="white" font-weight="600" font-size="15">План-график</text>
+                        <text x="600" y="405" text-anchor="middle" fill="white" font-size="12">производства</text>
+                    </g>
+                    
+                    <!-- Стрелки - строго вертикальные и горизонтальные -->
+                    <!-- От входящих заявок вниз -->
+                    <path d="M 150 130 L 150 200" stroke="#f39c12" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- От входящих заявок к единой системе -->
+                    <path d="M 250 90 L 500 90" stroke="#9b59b6" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- От единой системы к финансам -->
+                    <path d="M 700 90 L 950 90" stroke="#2980b9" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- От единой системы вниз -->
+                    <path d="M 600 130 L 600 200" stroke="#9b59b6" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Горизонтальные между канбанами -->
+                    <path d="M 250 240 L 275 240" stroke="#27ae60" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 475 240 L 500 240" stroke="#3498db" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 700 240 L 725 240" stroke="#e74c3c" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 925 240 L 950 240" stroke="#2ecc71" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- К план-графикам -->
+                    <path d="M 375 280 L 375 350" stroke="#95a5a6" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 600 280 L 600 350" stroke="#95a5a6" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    
+                    <!-- Маркер стрелки -->
+                    <defs>
+                        <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                            <polygon points="0 0, 10 3.5, 0 7" fill="#7f8c8d" />
+                        </marker>
+                    </defs>
+                </svg>
+            </div>
+            
+            <!-- Информационный блок -->
+            <div class="info-block">
+                <p><strong>Интерактивная схема процессов</strong></p>
+                <p style="margin-top: 8px;">Кликните на любой блок диаграммы для перехода к детальному просмотру раздела. Система построена на принципах канбан-методологии с полной прослеживаемостью всех этапов работы.</p>
+            </div>
+        </div>
+
+        <!-- Страница: Продажи -->
+        <div id="sales" class="page">
+            <h1 class="page-title">Обработка заявок</h1>
+            
+            <!-- Описание процесса обработки заявок -->
+            <div class="card">
+                <div class="card-title">Процесс обработки входящих заявок</div>
+                <div style="color: #2c3e50; line-height: 1.8; font-size: 14px;">
+                    <div style="margin-bottom: 15px;">
+                        <strong>1. Интеграция каналов связи:</strong> В систему интегрированы мессенджеры и почтовые ящики.
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>2. Поступление заявок:</strong> Заявки, поступающие на корпоративные телефоны, в мессенджеры или на адреса почты через внешние каналы, попадают в систему и отображаются в виде задач для менеджеров отдела продаж.
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>3. Обработка заявок:</strong> Менеджеры видят эти задачи на канбан-доске обработки входящих заявок и работают с ними.
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>4. Смена статусов:</strong> Заявка перемещается по статусам, таким как «новая», «в работе», «выставлено КП», «ожидание теплое», «сделка провалена» или «согласована».
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>5. Обратная связь:</strong> Из системы также можно отправлять ответные сообщения на адреса электронной почты и в мессенджеры потенциальным покупателям.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="kanban-board">
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #f39c12;">Новая заявка</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Кухня премиум класса</div>
+                        <div class="kanban-card-info">Иванов Иван Иванович</div>
+                        <div class="kanban-card-meta">Telegram • 2 часа назад</div>
+                    </div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Шкаф-купе в спальню</div>
+                        <div class="kanban-card-info">Петрова Анна Сергеевна</div>
+                        <div class="kanban-card-meta">Email • 4 часа назад</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #f0ad4e;">В работе</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Мебель для гостиной</div>
+                        <div class="kanban-card-info">Сидоров К.М.</div>
+                        <div class="kanban-card-meta">Менеджер: Елена • 1 день</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #5bc0de;">Выставлено КП</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Детская комната</div>
+                        <div class="kanban-card-info">Козлова О.В.</div>
+                        <div class="kanban-card-meta">КП №2024-234 • 450 000 ₽</div>
+                    </div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Офисная мебель</div>
+                        <div class="kanban-card-info">ООО "Вектор"</div>
+                        <div class="kanban-card-meta">КП №2024-235 • 1 200 000 ₽</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #f0ad4e;">Ожидание (теплое)</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Кухня в стиле модерн</div>
+                        <div class="kanban-card-info">Морозов П.Д.</div>
+                        <div class="kanban-card-meta">Думает до 15.01.2025</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #5cb85c;">Согласована</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Спальный гарнитур люкс</div>
+                        <div class="kanban-card-info">Белова Е.Е.</div>
+                        <div class="kanban-card-meta">Договор №2024-156</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #d9534f;">Сделка провалена</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Прихожая</div>
+                        <div class="kanban-card-info">Комаров А.В.</div>
+                        <div class="kanban-card-meta">Выбрал конкурентов</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Страница: Проектирование -->
+        <div id="design" class="page">
+            <h1 class="page-title">Проектирование</h1>
+            
+            <!-- Описание процесса проектирования -->
+            <div class="card">
+                <div class="card-title">Процесс проектирования</div>
+                <div style="color: #2c3e50; line-height: 1.8; font-size: 14px;">
+                    <div style="margin-bottom: 15px;">
+                        <strong>1. Добавление изделия:</strong> Менеджер добавляет в соответствующий раздел нового договора изделия и их карточки.
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>2. Задачи для проектировщиков:</strong> В карточку изделия автоматически добавляются задачи для проектировщиков.
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>3. План-график:</strong> После назначения исполнителей, задачи автоматически распределяются в план-графике по проектированию.
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>4. Личное рабочее пространство:</strong> Исполнитель может видеть свой график работы, обычно на ближайшие месяцы, через личное рабочее пространство.
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>5. Результаты и проверка:</strong> После того как изделие начерчено, конструктор размещает результаты в карточке товара, которые проверяют менеджер и главный конструктор.
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>6. Перемещение в производство:</strong> Если чертеж согласован заказчиком и разработано РД, карточка изделия перемещается в процесс производства и монтажа.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="kanban-board">
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #27ae60;">Заключен договор</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Проект №2024-156</div>
+                        <div class="kanban-card-info">Кухня • Белова Е.Е.</div>
+                        <div class="kanban-card-meta">Ожидает назначения</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #5cb85c;">Назначен конструктор</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Проект №2024-155</div>
+                        <div class="kanban-card-info">Гардероб • Смирнов И.П.</div>
+                        <div class="kanban-card-meta">Конструктор: Михаил • Срок: 20.01</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #3498db;">Разработка Эскиза</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Проект №2024-154</div>
+                        <div class="kanban-card-info">Офис • ООО "Стиль"</div>
+                        <div class="kanban-card-meta">Конструктор: Анна</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #f0ad4e;">На проверке</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Проект №2024-153</div>
+                        <div class="kanban-card-info">Спальня • Козлов А.А.</div>
+                        <div class="kanban-card-meta">Главный конструктор • 2 замечания</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #5bc0de;">Согласование с заказчиком</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Проект №2024-152</div>
+                        <div class="kanban-card-info">Кухня • Петров В.В.</div>
+                        <div class="kanban-card-meta">Отправлено на email • Ждем ответ</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #5cb85c;">Разработка РД</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Проект №2024-151</div>
+                        <div class="kanban-card-info">Детская • Иванова М.М.</div>
+                        <div class="kanban-card-meta">Передано: сегодня</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- График загрузки проектировщиков -->
+            <div class="card">
+                <div class="card-title">План-график проектировщиков на январь 2025</div>
+                <div class="gantt-chart">
+                    <div class="gantt-header">
+                        <div style="min-width: 180px;">Конструктор</div>
+                        <div style="flex: 1; display: flex; justify-content: space-between; padding: 0 20px;">
+                            <span>1 неделя</span>
+                            <span>2 неделя</span>
+                            <span>3 неделя</span>
+                            <span>4 неделя</span>
+                        </div>
+                    </div>
+                    <div class="gantt-row">
+                        <div class="gantt-label">Михаил Сергеев</div>
+                        <div class="gantt-timeline">
+                            <div class="gantt-bar" style="background: #27ae60; left: 10%; width: 25%;">Проект №155</div>
+                            <div class="gantt-bar" style="background: #3498db; left: 40%; width: 30%;">Проект №158</div>
+                        </div>
+                    </div>
+                    <div class="gantt-row">
+                        <div class="gantt-label">Анна Белова</div>
+                        <div class="gantt-timeline">
+                            <div class="gantt-bar" style="background: #3498db; left: 0; width: 35%;">Проект №154</div>
+                            <div class="gantt-bar" style="background: #f39c12; left: 40%; width: 25%;">Проект №159</div>
+                        </div>
+                    </div>
+                    <div class="gantt-row">
+                        <div class="gantt-label">Сергей Павлов</div>
+                        <div class="gantt-timeline">
+                            <div class="gantt-bar" style="background: #e74c3c; left: 20%; width: 20%;">Проект №153</div>
+                            <div class="gantt-bar" style="background: #27ae60; left: 45%; width: 35%;">Проект №160</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Страница: Производство -->
+        <div id="production" class="page">
+            <h1 class="page-title">Производство и монтаж</h1>
+            
+            <!-- Описание процесса производства -->
+            <div class="card">
+                <div class="card-title">Процесс производства</div>
+                <div style="color: #2c3e50; line-height: 1.8; font-size: 14px;">
+                    <div style="margin-bottom: 15px;">
+                        <strong>1. Подготовка документации:</strong> После проектирования и подписания чертежей, менеджер собирает всю необходимую документацию, аккумулирует её в карточке изделия и перемещает на канбан-доску производства.
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>2. Проверка и задания:</strong> Начальник производства, его заместитель (он же мастер цеха) получают и проверяют входящую документацию, на основе которой готовят задания для исполнителей в цеху.
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>3. Производственные задачи:</strong> Система автоматически добавляет в карточку изделия задачи по производственным процессам, которые формируются и дополняют график работ по производству.
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>4. Личные графики исполнителей (теоретически):</strong> В теории, система могла бы формировать личный график любого исполнителя в цеху (столяра, маляра, шлифовщика, упаковщика, монтажника), но на практике это не используется.
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>5. Движение по статусам и оповещения:</strong> Изделие проходит от статуса к статусу (например, проверено начальником производства, шлифовка, столярка, малярка, упаковка, склад). Статусы меняются вручную начальником производства. При смене статусов система оповещает о произошедших изменениях и напоминает о необходимых действиях.
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <strong>6. Завершение заказа:</strong> После успешного монтажа система оповещает менеджера, который подписывает закрывающие документы и завершает заказ, отправляя его в архив.
+                    </div>
+                </div>
+            </div>
+            
+            <div class="kanban-board">
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #3498db;">Проверено нач. производства</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Заказ №2024-151</div>
+                        <div class="kanban-card-info">Кухня классика</div>
+                        <div class="kanban-card-meta">Готово к запуску</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #8b6f47;">Столярный цех</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Заказ №2024-150</div>
+                        <div class="kanban-card-info">Шкаф-купе</div>
+                        <div class="kanban-card-meta">Цех 1 • День 3 из 5</div>
+                    </div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Заказ №2024-149</div>
+                        <div class="kanban-card-info">Комод с ящиками</div>
+                        <div class="kanban-card-meta">Цех 2 • День 1 из 3</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #d4a76a;">Шлифовальный участок</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Заказ №2024-148</div>
+                        <div class="kanban-card-info">Стол обеденный</div>
+                        <div class="kanban-card-meta">Готовность: 80%</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #9370db;">Покрасочный цех</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Заказ №2024-147</div>
+                        <div class="kanban-card-info">Тумба под ТВ</div>
+                        <div class="kanban-card-meta">Цвет: RAL 9003 • Сушка</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #f0ad4e;">Упаковка</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Заказ №2024-146</div>
+                        <div class="kanban-card-info">Кровать двуспальная</div>
+                        <div class="kanban-card-meta">Готово к отгрузке</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #708090;">Склад готовой продукции</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Заказ №2024-145</div>
+                        <div class="kanban-card-info">Полки навесные (6 шт)</div>
+                        <div class="kanban-card-meta">Зона А-12 • Ожидает монтажа</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #4169e1;">Монтаж</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Заказ №2024-144</div>
+                        <div class="kanban-card-info">Кухня №2024-144</div>
+                        <div class="kanban-card-meta">Бригада 2 • 15.01 в 10:00</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #5cb85c;">Завершено</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Заказ №2024-143</div>
+                        <div class="kanban-card-info">Гардеробная система</div>
+                        <div class="kanban-card-meta">Сдан: 12.01.2025</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- План-график производства в стиле Планфикс -->
+            <div class="card">
+                <div class="card-title">План-график загрузки исполнителей • Январь 2025</div>
+                <div class="gantt-chart">
+                    <div class="gantt-header" style="display: flex; background: #f7f8fa; padding: 12px; border: 1px solid #e1e4e8;">
+                        <div style="width: 250px; font-weight: 600;">Исполнитель / Заказ</div>
+                        <div style="flex: 1; display: flex;">
+                            <div style="flex: 1; text-align: center; border-left: 1px solid #e1e4e8;">Неделя 1</div>
+                            <div style="flex: 1; text-align: center; border-left: 1px solid #e1e4e8;">Неделя 2</div>
+                            <div style="flex: 1; text-align: center; border-left: 1px solid #e1e4e8;">Неделя 3</div>
+                            <div style="flex: 1; text-align: center; border-left: 1px solid #e1e4e8;">Неделя 4</div>
+                            <div style="flex: 0.5; text-align: center; border-left: 1px solid #e1e4e8;">Нед. 5</div>
+                        </div>
+                    </div>
+                    
+                    <div class="gantt-row" style="display: flex; border: 1px solid #e1e4e8; border-top: none;">
+                        <div class="gantt-label" style="width: 250px; padding: 10px; background: #fff;">Петров А.В. (столяр)</div>
+                        <div class="gantt-timeline" style="flex: 1; position: relative; height: 50px; background: #fafbfc;">
+                            <div class="gantt-bar" style="background: #8b6f47; left: 2%; width: 12%;">Заказ №150</div>
+                            <div class="gantt-bar" style="background: #8b6f47; left: 25%; width: 15%;">Заказ №151</div>
+                            <div class="gantt-bar" style="background: #a0826d; left: 50%; width: 18%;">Заказ №152</div>
+                            <div class="gantt-bar" style="background: #a0826d; left: 75%; width: 22%;">Заказ №153</div>
+                        </div>
+                    </div>
+                    
+                    <div class="gantt-row" style="display: flex; border: 1px solid #e1e4e8; border-top: none; background: #f7f8fa;">
+                        <div class="gantt-label" style="width: 250px; padding: 10px; background: #fff;">Козлов Д.П. (маляр)</div>
+                        <div class="gantt-timeline" style="flex: 1; position: relative; height: 50px;">
+                            <div class="gantt-bar" style="background: #9370db; left: 5%; width: 10%;">№146</div>
+                            <div class="gantt-bar" style="background: #9370db; left: 23%; width: 12%;">№147</div>
+                            <div class="gantt-bar" style="background: #9370db; left: 42%; width: 11%;">№148</div>
+                            <div class="gantt-bar" style="background: #a690db; left: 60%; width: 9%;">№149</div>
+                            <div class="gantt-bar" style="background: #a690db; left: 78%; width: 15%;">№150</div>
+                        </div>
+                    </div>
+                    
+                    <div class="gantt-row" style="display: flex; border: 1px solid #e1e4e8; border-top: none;">
+                        <div class="gantt-label" style="width: 250px; padding: 10px; background: #fff;">Николаев В.В. (монтаж)</div>
+                        <div class="gantt-timeline" style="flex: 1; position: relative; height: 50px; background: #fafbfc;">
+                            <div class="gantt-bar" style="background: #4169e1; left: 11%; width: 2%; font-size: 10px;">4</div>
+                            <div class="gantt-bar" style="background: #4169e1; left: 35%; width: 2%; font-size: 10px;">11</div>
+                            <div class="gantt-bar" style="background: #4169e1; left: 48%; width: 2%; font-size: 10px;">15</div>
+                            <div class="gantt-bar" style="background: #4169e1; left: 71%; width: 2%; font-size: 10px;">22</div>
+                            <div class="gantt-bar" style="background: #4169e1; left: 90%; width: 2%; font-size: 10px;">28</div>
+                        </div>
+                    </div>
+                    
+                    <div class="gantt-row" style="display: flex; border: 1px solid #e1e4e8; border-top: none; background: #f7f8fa;">
+                        <div class="gantt-label" style="width: 250px; padding: 10px; background: #fff;">Федоров П.С. (монтаж)</div>
+                        <div class="gantt-timeline" style="flex: 1; position: relative; height: 50px;">
+                            <div class="gantt-bar" style="background: #4169e1; left: 19%; width: 2%; font-size: 10px;">7</div>
+                            <div class="gantt-bar" style="background: #4169e1; left: 42%; width: 2%; font-size: 10px;">13</div>
+                            <div class="gantt-bar" style="background: #4169e1; left: 61%; width: 2%; font-size: 10px;">19</div>
+                            <div class="gantt-bar" style="background: #4169e1; left: 77%; width: 2%; font-size: 10px;">24</div>
+                            <div class="gantt-bar" style="background: #4169e1; left: 96%; width: 2%; font-size: 10px;">30</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Страница: Образцы -->
+        <div id="samples" class="page">
+            <h1 class="page-title">Выкрасы и образцы</h1>
+            <!-- Описание процесса изготовления образцов -->
+<div class="card">
+    <div class="card-title">О процессе изготовления образцов</div>
+    <div style="color: #2c3e50; line-height: 1.8; font-size: 14px;">
+        <div style="margin-bottom: 15px;">
+            Изготовление образцов это <strong>параллельный независимый процесс</strong>.
+        </div>
+        <ol style="margin-left: 20px;">
+            <li style="margin-bottom: 10px;">
+                <strong>Цель</strong>: Создаются небольшие деревянные плашки – <strong>выкрасы и образцы</strong> – для согласования типа отделки будущих изделий.
+            </li>
+            <li style="margin-bottom: 10px;">
+                <strong>Постановка задачи</strong>: Менеджер ставит задачу на производство.
+            </li>
+            <li style="margin-bottom: 10px;">
+                <strong>Изготовление</strong>: Производство принимает задачу и изготавливает образцы либо собственными силами, либо силами подрядчика.
+            </li>
+            <li style="margin-bottom: 10px;">
+                <strong>Хранение рецептов</strong>: Система позволяет хранить <strong>рецепты всех произведённых выкрасов и образцов</strong> в специальной таблице.
+            </li>
+        </ol>
+    </div>
+</div>
+            <div class="kanban-board">
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #2ecc71;">Запрошено</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">RAL 7035</div>
+                        <div class="kanban-card-info">Заказчик: Петров А.А.</div>
+                        <div class="kanban-card-meta">МДФ матовый • Проект №156</div>
+                    </div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Орех миланский</div>
+                        <div class="kanban-card-info">Заказчик: ООО "Комфорт"</div>
+                        <div class="kanban-card-meta">Шпон натуральный • Проект №157</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #5cb85c;">В работе</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Дуб беленый</div>
+                        <div class="kanban-card-info">Заказчик: ООО "Стиль"</div>
+                        <div class="kanban-card-meta">Шпон • Мастер: Алексей</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #3498db;">На утверждении</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Серый графит</div>
+                        <div class="kanban-card-info">Заказчик: Иванова А.А.</div>
+                        <div class="kanban-card-meta">Отправлено фото • Ждем ответ</div>
+                    </div>
+                </div>
+                
+                <div class="kanban-column">
+                    <div class="kanban-header" style="background: #27ae60;">Утверждено</div>
+                    <div class="kanban-card">
+                        <div class="kanban-card-title">Орех итальянский</div>
+                        <div class="kanban-card-info">Рецепт №234</div>
+                        <div class="kanban-card-meta">Готов к производству</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Таблица рецептов -->
+            <div class="card">
+                <div class="card-title">База рецептов покраски</div>
+                <div style="margin-bottom: 15px;">
+                    <input type="text" class="form-input" placeholder="Поиск по названию, коду или компонентам..." onkeyup="filterRecipes(this.value)">
+                </div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>№ Рецепта</th>
+                            <th>Название</th>
+                            <th>Тип покрытия</th>
+                            <th>База</th>
+                            <th>Пигменты</th>
+                            <th>Финишный слой</th>
+                        </tr>
+                    </thead>
+                    <tbody id="recipesTable">
+                        <tr>
+                            <td><strong>234</strong></td>
+                            <td>Орех итальянский</td>
+                            <td>Морилка + лак</td>
+                            <td>Sayerlack TU 0034</td>
+                            <td>XA 2006 - 12г, XA 2030 - 8г</td>
+                            <td>TZ 5520 матовый 30%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>235</strong></td>
+                            <td>Дуб беленый</td>
+                            <td>Морилка + лак</td>
+                            <td>Sayerlack TU 0029</td>
+                            <td>XA 2050 - 15г</td>
+                            <td>TZ 5510 полуматовый 50%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>236</strong></td>
+                            <td>RAL 7035</td>
+                            <td>Эмаль</td>
+                            <td>Sayerlack TC 1750</td>
+                            <td>Готовый цвет</td>
+                            <td>TZ 5520 матовый 30%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>237</strong></td>
+                            <td>Венге темный</td>
+                            <td>Морилка + лак</td>
+                            <td>Sayerlack TU 0041</td>
+                            <td>XA 2006 - 25г, XA 2008 - 10г</td>
+                            <td>TZ 5530 глянцевый 90%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>238</strong></td>
+                            <td>Белый матовый</td>
+                            <td>Эмаль</td>
+                            <td>Sayerlack TC 1710</td>
+                            <td>RAL 9003</td>
+                            <td>TZ 5520 матовый 20%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Страница: Финансы -->
+        <div id="finance" class="page">
+            <h1 class="page-title">Финансовая отчетность</h1>
+
+            <!-- Описание финансовой системы -->
+<div class="card">
+    <div class="card-title">О финансовой отчетности</div>
+    <div style="color: #2c3e50; line-height: 1.8; font-size: 14px;">
+        <ol style="margin-left: 20px;">
+            <li style="margin-bottom: 15px;">
+                <strong>Отчетность</strong>: Система умеет визуализировать и составлять отчёты по <strong>движению денежных средств</strong>, по проектам в рамках оплат, очередности оплат и по задолженностям (как по одному, так и по всем проектам).
+            </li>
+            <li style="margin-bottom: 15px;">
+                <strong>Автоматические задачи</strong>: В момент создания ячейки хранения информации по договору система автоматически создает задачи, позволяющие <strong>формировать план выручки</strong> и <strong>фиксировать фактическое поступление денежных средств</strong>.
+            </li>
+            <li style="margin-bottom: 15px;">
+                <strong>Планирование и контроль</strong>: На основе стандартных заготовок менеджер и руководитель отдела продаж могут <strong>планировать выручку, контролировать дебиторскую задолженность</strong> и отслеживать выполнение плана продаж.
+            </li>
+            <li style="margin-bottom: 15px;">
+                <strong>Контроль оплат</strong>: В системе есть заготовки для контроля оплат по договору менеджером, а также для контроля менеджера его руководителем и директором организации.
+            </li>
+            <li style="margin-bottom: 15px;">
+                <strong>Отчет выполнения плана</strong>: При заключении договора менеджером формируется план-график поступления денежных средств, а по факту их поступления формируется <strong>отчёт выполнения плана продаж</strong>, где видна результативность менеджеров и общая картина выполнения плана организации.
+            </li>
+        </ol>
+    </div>
+</div>
+            
+            <!-- Выполнение плана по менеджерам -->
+            <div class="card">
+                <div class="card-title">Выполнение плана продаж по менеджерам</div>
+                <div style="margin: 20px 0;">
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <strong>Менеджер 1</strong>
+                            <span style="color: var(--text-secondary); font-size: 14px;">2 760 000 ₽ / 3 000 000 ₽</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 92%; background: #27ae60;">92%</div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <strong>Менеджер 2</strong>
+                            <span style="color: var(--text-secondary); font-size: 14px;">2 340 000 ₽ / 3 000 000 ₽</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 78%; background: #f39c12;">78%</div>
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <strong>Менеджер 3</strong>
+                            <span style="color: var(--text-secondary); font-size: 14px;">1 950 000 ₽ / 3 000 000 ₽</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 65%; background: #e74c3c;">65%</div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                            <strong>Менеджер 4</strong>
+                            <span style="color: var(--text-secondary); font-size: 14px;">2 450 000 ₽ / 3 000 000 ₽</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 82%; background: #3498db;">82%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Движение денежных средств -->
+            <div class="card">
+                <div class="card-title">Движение денежных средств по проектам</div>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Проект</th>
+                            <th>Сумма договора</th>
+                            <th>Аванс (30%)</th>
+                            <th>Промежуточный (40%)</th>
+                            <th>Финальный (30%)</th>
+                            <th>Итого получено</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>№2024-156</strong></td>
+                            <td>850 000 ₽</td>
+                            <td style="color: #27ae60;">✔ 255 000 ₽</td>
+                            <td style="color: #27ae60;">✔ 340 000 ₽</td>
+                            <td>—</td>
+                            <td><strong>595 000 ₽</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>№2024-155</strong></td>
+                            <td>620 000 ₽</td>
+                            <td style="color: #27ae60;">✔ 186 000 ₽</td>
+                            <td>—</td>
+                            <td>—</td>
+                            <td><strong>186 000 ₽</strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>№2024-154</strong></td>
+                            <td>1 200 000 ₽</td>
+                            <td style="color: #27ae60;">✔ 360 000 ₽</td>
+                            <td style="color: #27ae60;">✔ 480 000 ₽</td>
+                            <td style="color: #27ae60;">✔ 360 000 ₽</td>
+                            <td><strong>1 200 000 ₽</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <!-- Страница: Единая система хранения информации -->
+<div id="storage" class="page">
+    <h1 class="page-title">Единая система хранения информации</h1>
+    
+    <!-- Описание системы -->
+<div class="card">
+    <div class="card-title">О системе хранения</div>
+    <div style="color: #2c3e50; line-height: 1.8; font-size: 14px;">
+        <p style="margin-bottom: 20px;">
+            Единая система хранения информации является ключевым элементом для организации и управления данными в рамках производственных процессов.
+        </p>
+        
+        <h3 style="color: #9b59b6; margin-bottom: 15px; font-size: 16px;">
+            Как устроена и когда создается:
+        </h3>
+        <ul style="margin-left: 20px; margin-bottom: 25px;">
+            <li style="margin-bottom: 12px;">
+                <strong>Создание после сделки</strong>: Единая система хранения информации формируется, как только сделка состоялась.
+            </li>
+            <li style="margin-bottom: 12px;">
+                <strong>Создание нового заказчика и проекта</strong>: В этом разделе системы создается новый заказчик, который также рассматривается как проект, а также соответствующий договор или несколько договоров, в зависимости от контекста заказа.
+            </li>
+            <li style="margin-bottom: 12px;">
+                <strong>Автоматическая структура хранения</strong>: Система <strong>автоматически создает структуру хранения информации</strong> с определенными папками и разделами. Эти папки и разделы регламентируют, как должна храниться та или иная информация по проекту.
+            </li>
+        </ul>
+        
+        <h3 style="color: #9b59b6; margin-bottom: 15px; font-size: 16px;">
+            Что хранится в системе:
+        </h3>
+        <p style="margin-bottom: 15px;">
+            В рамках этой структуры хранения по каждому проекту система аккумулирует и упорядочивает следующую информацию:
+        </p>
+        <ul style="margin-left: 20px;">
+            <li style="margin-bottom: 10px;"><strong>Первичные документы</strong></li>
+            <li style="margin-bottom: 10px;"><strong>Закрывающие документы</strong></li>
+            <li style="margin-bottom: 10px;"><strong>Чертежи</strong></li>
+            <li style="margin-bottom: 10px;"><strong>Переписка между участниками проекта внутри системы</strong></li>
+            <li style="margin-bottom: 10px;"><strong>Информация о выручке</strong></li>
+        </ul>
+
+        <h3 style="color: #9b59b6; margin-bottom: 15px; font-size: 16px;">
+            По каждому изделию внутри договора система также хранит:
+        </h3>
+        <ul style="margin-left: 20px;">
+            <li style="margin-bottom: 10px;"><strong>Техническое задание на изделие</strong> – детальное описание требований и характеристик</li>
+            <li style="margin-bottom: 10px;"><strong>Чертежи на согласование</strong> – версии для утверждения заказчиком</li>
+            <li style="margin-bottom: 10px;"><strong>Рабочая документация в цех</strong> – производственные чертежи и инструкции</li>
+            <li style="margin-bottom: 10px;"><strong>Задачи по проектированию и производству</strong> – из которых автоматически формируются план-графики работ</li>
+        </ul>
+    </div>
+</div>
+    
+    <!-- Визуальная схема структуры папок -->
+<div class="card">
+    <div class="card-title">Структура хранения по проекту</div>
+    <div style="background: #f7f8fa; padding: 25px; border-radius: 6px;">
+        <div style="font-family: monospace; color: #2c3e50; line-height: 1.8;">
+            <div>📁 <strong>Проект №2024-156 - Белова Е.Е.</strong></div>
+            <div style="margin-left: 25px;">├── 📁 Договоры</div>
+            <div style="margin-left: 50px;">├── 📄 Договор №2024-156.pdf</div>
+            <div style="margin-left: 50px;">└── 📄 Дополнительное соглашение №1.pdf</div>
+            <div style="margin-left: 25px;">├── 📁 Первичные документы</div>
+            <div style="margin-left: 50px;">├── 📄 Счет на оплату.pdf</div>
+            <div style="margin-left: 50px;">└── 📄 Спецификация.xlsx</div>
+            <div style="margin-left: 25px;">├── 📁 Изделия</div>
+            <div style="margin-left: 50px;">├── 📁 Изделие 1 - Кухня</div>
+            <div style="margin-left: 75px;">├── 📄 Техническое задание</div>
+            <div style="margin-left: 75px;">├── 📋 Задача: Чертеж на согласование</div>
+            <div style="margin-left: 75px;">├── 📋 Задача: РД (рабочая документация)</div>
+            <div style="margin-left: 75px;">├── 📋 Задача: Столярка</div>
+            <div style="margin-left: 75px;">├── 📋 Задача: Шлифовка</div>
+            <div style="margin-left: 75px;">└── 📋 Задача: Малярка</div>
+            <div style="margin-left: 50px;">└── 📁 Изделие 2 - Шкаф-купе</div>
+            <div style="margin-left: 75px;">├── 📄 Техническое задание.pdf</div>
+            <div style="margin-left: 75px;">├── 📋 Задача: Чертеж на согласование</div>
+            <div style="margin-left: 75px;">├── 📋 Задача: РД (рабочая документация)</div>
+            <div style="margin-left: 75px;">├── 📋 Задача: Столярка</div>
+            <div style="margin-left: 75px;">├── 📋 Задача: Шлифовка</div>
+            <div style="margin-left: 75px;">└── 📋 Задача: Малярка</div>
+            <div style="margin-left: 25px;">├── 📁 Переписка</div>
+            <div style="margin-left: 50px;">├── 📄 Согласование дизайна.msg</div>
+            <div style="margin-left: 50px;">└── 📄 Изменения от заказчика.pdf</div>
+            <div style="margin-left: 25px;">├── 📁 Закрывающие документы</div>
+            <div style="margin-left: 50px;">├── 📄 Акт выполненных работ.pdf</div>
+            <div style="margin-left: 50px;">├── 📄 Накладная.pdf</div>
+            <div style="margin-left: 50px;">└── 📄 Счет-фактура.pdf</div>
+            <div style="margin-left: 25px;">└── 📁 Финансы</div>
+            <div style="margin-left: 50px;">├── 📄 Расчет себестоимости.xlsx</div>
+            <div style="margin-left: 50px;">└── 📄 Отчет по выручке.pdf</div>
+        </div>
+    </div>
+</div>
+    
+    <!-- Информационный блок -->
+    <div class="info-block">
+        <p><strong>Преимущества единой системы хранения:</strong></p>
+        <p style="margin-top: 10px;">
+            • Все документы по проекту в одном месте<br>
+            • Автоматическое создание структуры папок<br>
+            • Быстрый поиск нужной информации<br>
+            • Контроль версий документов<br>
+            • Разграничение прав доступа
+        </p>
+    </div>
+</div>
+    </main>
+
+    
+
+    <!-- Навигационные табы -->
+    <nav class="tabs">
+        <button class="tab active" onclick="switchTab('overview')" data-tab="overview">
+            <div class="tab-icon" style="background: linear-gradient(135deg, #9b59b6, #3498db);"></div>
+            <span class="tab-text">Обзор</span>
+        </button>
+        <button class="tab" onclick="switchTab('storage')" data-tab="storage">
+    <div class="tab-icon" style="background: #9b59b6;"></div>
+    <span class="tab-text">Хранение</span>
+</button>
+        <button class="tab" onclick="switchTab('sales')" data-tab="sales">
+            <div class="tab-icon" style="background: #f39c12;"></div>
+            <span class="tab-text">Продажи</span>
+        </button>
+        <button class="tab" onclick="switchTab('design')" data-tab="design">
+            <div class="tab-icon" style="background: #27ae60;"></div>
+            <span class="tab-text">Проектирование</span>
+        </button>
+        <button class="tab" onclick="switchTab('production')" data-tab="production">
+            <div class="tab-icon" style="background: #3498db;"></div>
+            <span class="tab-text">Производство</span>
+        </button>
+        <button class="tab" onclick="switchTab('samples')" data-tab="samples">
+            <div class="tab-icon" style="background: #2ecc71;"></div>
+            <span class="tab-text">Образцы</span>
+        </button>
+        <button class="tab" onclick="switchTab('finance')" data-tab="finance">
+            <div class="tab-icon" style="background: #2980b9;"></div>
+            <span class="tab-text">Финансы</span>
+        </button>
+    </nav>
+
+    <script>
+        // Переключение табов
+        function switchTab(tabId) {
+            // Скрыть все страницы
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Показать выбранную страницу
+            const selectedPage = document.getElementById(tabId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+            }
+            
+            // Обновить активный таб
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            const activeTab = document.querySelector(`[data-tab="${tabId}"]`);
+            if (activeTab) {
+                activeTab.classList.add('active');
+            }
+            
+            // Сохранить в localStorage
+            localStorage.setItem('activeTab', tabId);
+            
+            // Прокрутка вверх при смене таба
+            window.scrollTo(0, 0);
+        }
+
+        // Восстановление последнего активного таба
+        window.addEventListener('DOMContentLoaded', function() {
+            const savedTab = localStorage.getItem('activeTab');
+            if (savedTab && savedTab !== 'overview') {
+                switchTab(savedTab);
+            }
+        });
+
+        // Демонстрация процесса кухни
+        function showKitchenDemo() {
+            // Создаем модальное окно
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background: rgba(0,0,0,0.5);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                z-index: 1000;
+                padding: 20px;
+            `;
+            
+            const modalContent = document.createElement('div');
+            modalContent.style.cssText = `
+                background: white;
+                border-radius: 8px;
+                max-width: 900px;
+                width: 100%;
+                max-height: 90vh;
+                overflow-y: auto;
+                padding: 40px;
+                box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+                position: relative;
+            `;
+            
+            modalContent.innerHTML = `
+                <button onclick="this.closest('div').parentElement.remove()" style="
+                    position: absolute;
+                    top: 20px;
+                    right: 20px;
+                    background: none;
+                    border: none;
+                    font-size: 24px;
+                    cursor: pointer;
+                    color: #999;
+                ">✕</button>
+                
+                <h2 style="color: #2c3e50; margin-bottom: 25px; font-size: 24px;">
+                    Движение заказа на примере кухни: полный цикл в системе
+                </h2>
+                
+                <div style="color: #2c3e50; line-height: 1.8; font-size: 15px;">
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: #f39c12; margin-bottom: 15px; font-size: 18px;">
+                            1. Продажи (Канбан-доска "Обработка заявок")
+                        </h3>
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li style="margin-bottom: 10px;">
+                                <strong>Заявка:</strong> Заказчик через мессенджер или почту отправляет запрос на изготовление кухни с фотографиями. Система автоматически создает задачу на канбан-доске в статусе "Новая заявка".
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Обработка менеджером:</strong> Менеджер принимает заявку в работу, создает контакт заказчика в системе, формирует коммерческое предложение и отправляет его через интеграцию с мессенджер или почту.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Договор:</strong> После согласования условий менеджер создает в системе проект с договором, используя шаблоны документов. Система автоматически систему попок и шаблонов задач для хранения информации по договору.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Создание заказа:</strong> После получения аванса менеджер добавляет карточки изделий в проект. Все данные связываются: заказчик → проект → договор → изделие.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Финансовые задачи:</strong> Система автоматически создает задачи по контролю платежей с напоминаниями: аванс 30%, промежуточный платеж 40%, финальный 30%.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Контроль:</strong> Автоматически формируется шаблон план-графика по поступлению средств.
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: #27ae60; margin-bottom: 15px; font-size: 18px;">
+                            2. Проектирование (Канбан-доска "Проектирование")
+                        </h3>
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li style="margin-bottom: 10px;">
+                                <strong>Начало процесса:</strong> После заключения договора задача автоматически переходит на доску проектирования через настроенные сценарии.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Назначение исполнителей:</strong> Главный конструктор через систему назначает конструктора, устанавливает сроки. Задача появляется в личном планировщике исполнителя.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>План-график:</strong> В разделе "План-график проектирования" отображается загрузка всех конструкторов в виде диаграммы Ганта. Видны пересечения и конфликты в расписании.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Рабочий процесс:</strong> Конструктор работает с задачей, прикрепляет чертежи и спецификации прямо в карточку изделия. Все версии файлов сохраняются.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Проверка и согласование:</strong> Главный конструктор проверяет через чек-листы, менеджер согласовывает с заказчиком. После утверждения и разработки РД, менеджер переходит карточку изделия в производство.
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: #3498db; margin-bottom: 15px; font-size: 18px;">
+                            3. Производство и Монтаж (Канбан-доска "Производство")
+                        </h3>
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li style="margin-bottom: 10px;">
+                                <strong>Принятие в работу:</strong> Начальник производства получает уведомление о новой задаче, проверяет комплектность документации через чек-лист, подтверждает готовность к производству.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Назначение на участки:</strong> Через систему назначаются исполнители на каждый этап: столярка, шлифовка, покраска.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>График производства:</strong> План-график производства показывает загрузку цехов и участков. Видна последовательность операций и критический путь проекта.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Движение по статусам:</strong> Изделие проходит статусы: "Столярный цех" → "Шлифовка" → "Покрасочный цех" → "Упаковка" → "Склад". При смене статуса отправляются уведомления.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Оповещения:</strong> Система напоминает: "Подготовьте материалы", "Изделие готово к отгрузке", "Запланирован монтаж".
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Монтаж:</strong> Создается задача монтажной бригаде с адресом и временем. После монтажа прикрепляются фото и акт выполненных работ.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Завершение:</strong> После успешного монтажа менеджер получает уведомление, подписывает закрывающие документы, проект переводится в архив.
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #e74c3c; margin-bottom: 15px; font-size: 18px;">
+                            4. Рекламации (при необходимости)
+                        </h3>
+                        <ul style="list-style: none; padding-left: 0;">
+                            <li style="margin-bottom: 10px;">
+                                <strong>Регистрация:</strong> При обращении клиента менеджер создает задачу на доске "Рекламации" с описанием проблемы и фотофиксацией.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Анализ:</strong> Определяются причины, назначаются ответственные. Задачи по устранению автоматически добавляются в план-график производства.
+                            </li>
+                            <li style="margin-bottom: 10px;">
+                                <strong>Исполнение:</strong> Работы по устранению отслеживаются через систему. Клиент получает уведомления о статусе решения проблемы.
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div style="background: #f0f8ff; border-left: 4px solid #4a90e2; padding: 20px; border-radius: 4px; margin-top: 30px;">
+                        <strong style="color: #2980b9;">Ключевые преимущества системы:</strong>
+                        <ul style="margin-top: 10px; padding-left: 20px;">
+                            <li>Полная прослеживаемость заказа от заявки до монтажа</li>
+                            <li>Автоматизация рутинных операций и напоминаний</li>
+                            <li>Единое информационное пространство для всех участников</li>
+                            <li>Контроль сроков и финансов в режиме реального времени</li>
+                            <li>Интеграция с мессенджерами для оперативной коммуникации</li>
+                        </ul>
+                    </div>
+                </div>
+            `;
+            
+            modal.appendChild(modalContent);
+            document.body.appendChild(modal);
+            
+            // Закрытие по клику вне окна
+            modal.addEventListener('click', function(e) {
+                if (e.target === modal) {
+                    modal.remove();
+                }
+            });
+        }
+
+        // Фильтрация рецептов
+        function filterRecipes(searchValue) {
+            const rows = document.querySelectorAll('#recipesTable tr');
+            const search = searchValue.toLowerCase();
+            
+            rows.forEach(row => {
+                const text = row.textContent.toLowerCase();
+                row.style.display = text.includes(search) ? '' : 'none';
+            });
+        }
+
+        // Добавление интерактивности карточкам
+        document.addEventListener('DOMContentLoaded', function() {
+            // Эффект при клике на канбан-карточки
+            const cards = document.querySelectorAll('.kanban-card');
+            cards.forEach(card => {
+                card.addEventListener('click', function() {
+                    this.style.transform = 'scale(0.98)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 100);
+                });
+            });
+            
+            // Подсветка строк таблицы при наведении
+            const tableRows = document.querySelectorAll('.table tbody tr');
+            tableRows.forEach(row => {
+                row.style.cursor = 'pointer';
+            });
+        });
+    </script>
+</body>
+</html>
