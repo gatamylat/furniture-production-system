@@ -423,6 +423,121 @@
             margin: 20px 0;
             border-radius: 4px;
         }
+        /* СТИЛИ ДЛЯ БЛОКОВ ПРЕИМУЩЕСТВ */
+.benefits-block {
+    border-radius: 8px;
+    padding: 20px 25px;
+    margin: 20px 0;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    display: none; /* Скрываем все блоки по умолчанию */
+}
+
+/* Показываем только нужный блок на активной странице */
+.page.active .benefits-block {
+    display: block;
+}
+
+.benefits-block:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+}
+
+.benefits-block:hover .benefits-shape {
+    transform: rotate(10deg) scale(1.05);
+}
+
+.benefits-shape {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    top: -80px;
+    right: -80px;
+    transition: all 0.5s ease;
+}
+
+.benefits-content {
+    position: relative;
+    z-index: 1;
+}
+
+.benefits-content h3 {
+    color: white;
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+}
+
+.benefits-content ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.benefits-content li {
+    color: rgba(255, 255, 255, 0.95);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 8px;
+    padding-left: 20px;
+    position: relative;
+}
+
+.benefits-content li:before {
+    content: "•";
+    position: absolute;
+    left: 0;
+    font-size: 16px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Градиенты для каждого раздела */
+#overview .benefits-block {
+    background: linear-gradient(135deg, #764ba2 0%, #3353e4 100%);
+}
+
+#sales .benefits-block {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+}
+
+#design .benefits-block {
+    background: linear-gradient(135deg, #2fa858 0%, #33f771 100%);
+}
+
+#production .benefits-block {
+    background: linear-gradient(135deg, #329efc 0%, #01c8d3 100%);
+}
+
+#samples .benefits-block {
+    background: linear-gradient(135deg, #02e64e 0%, #38f9d7 100%);
+}
+
+#finance .benefits-block {
+    background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+}
+
+#storage .benefits-block {
+    background: linear-gradient(135deg, #9944ba 0%, #512e5f 100%);
+}
+
+@media (max-width: 768px) {
+    .benefits-block {
+        padding: 15px 20px;
+    }
+    
+    .benefits-content h3 {
+        font-size: 16px;
+    }
+    
+    .benefits-content li {
+        font-size: 13px;
+    }
+}
 
         .info-block p {
             margin: 0;
@@ -575,11 +690,40 @@
                 <p><strong>Интерактивная схема процессов</strong></p>
                 <p style="margin-top: 8px;">Кликните на любой блок диаграммы для перехода к детальному просмотру раздела.</p>
             </div>
+            <!-- Блок преимуществ -->
+            <div class="benefits-block">
+                <div class="benefits-shape"></div>
+                <div class="benefits-content">
+                    <h3>Преимущества системы управления производством</h3>
+                    <ul>
+                        <li>Автоматизация рутинных операций экономит 3-5 часов рабочего времени ежедневно</li>
+                        <li>Снижение количества ошибок на 87% за счет исключения человеческого фактора</li>
+                        <li>Полный контроль над всеми процессами в режиме реального времени</li>
+                        <li>Интеграция всех отделов в единое информационное пространство</li>
+                        <li>Прозрачность процессов для руководства и исполнителей</li>
+                    </ul>
+                </div>
+            </div>
         </div>
 
         <!-- Страница: Продажи -->
         <div id="sales" class="page">
             <h1 class="page-title">Обработка заявок</h1>
+
+            <!-- Блок преимуществ -->
+            <div class="benefits-block">
+                <div class="benefits-shape"></div>
+                <div class="benefits-content">
+                    <h3>Преимущества автоматизации отдела продаж</h3>
+                    <ul>
+                        <li>Все заявки из разных каналов собираются в единой системе</li>
+                        <li>Скорость обработки заявок увеличивается</li>
+                        <li>Автоматические напоминания не дают упустить потенциальных клиентов</li>
+                        <li>История взаимодействия с каждым клиентом в одном месте</li>
+                        <li>Контроль эффективности работы менеджеров в рамках единой системы</li>
+                    </ul>
+                </div>
+            </div>
             
             <!-- Описание процесса обработки заявок -->
             <div class="card">
@@ -669,10 +813,25 @@
                 </div>
             </div>
         </div>
-
+        
         <!-- Страница: Проектирование -->
         <div id="design" class="page">
             <h1 class="page-title">Проектирование</h1>
+
+            <!-- Блок преимуществ -->
+            <div class="benefits-block">
+                <div class="benefits-shape"></div>
+                <div class="benefits-content">
+                    <h3>Преимущества системы проектирования</h3>
+                    <ul>
+                        <li>Наглядная загрузка конструкторов в план-графике на месяц вперед</li>
+                        <li>Автоматическое сохранение всех версий чертежей и спецификаций</li>
+                        <li>Возможность онлайн-согласование чертежей с заказчиком без встреч</li>
+                        <li>Мгновенная передача утвержденной документации в производство</li>
+                        <li>Повышение надежности при передаче данных между отделами</li>
+                    </ul>
+                </div>
+            </div>
             
             <!-- Описание процесса проектирования -->
             <div class="card">
@@ -796,6 +955,21 @@
         <!-- Страница: Производство -->
         <div id="production" class="page">
             <h1 class="page-title">Производство и монтаж</h1>
+
+            <!-- Блок преимуществ -->
+            <div class="benefits-block">
+                <div class="benefits-shape"></div>
+                <div class="benefits-content">
+                    <h3>Преимущества производственного модуля</h3>
+                    <ul>
+                        <li>Снижение простоев оборудования на 40% за счет оптимального планирования</li>
+                        <li>Уменьшение процента брака в 3 раза благодаря актуальной документации</li>
+                        <li>Автоматические уведомления о смене статуса выполнения задачи</li>
+                        <li>Прозрачный график загрузки каждого участка производства</li>
+                        <li>Контроль соблюдения сроков на каждом этапе изготовления</li>
+                    </ul>
+                </div>
+            </div>
             
             <!-- Описание процесса производства -->
             <div class="card">
@@ -965,6 +1139,22 @@
         <!-- Страница: Образцы -->
         <div id="samples" class="page">
             <h1 class="page-title">Выкрасы и образцы</h1>
+
+            <!-- Блок преимуществ -->
+            <div class="benefits-block">
+                <div class="benefits-shape"></div>
+                <div class="benefits-content">
+                    <h3>Преимущества системы управления выкрасами</h3>
+                    <ul>
+                        <li>База данных проверенными рецептами покраски в рамках системы</li>
+                        <li>Мгновенный поиск по коду RAL, названию или компонентам</li>
+                        <li>История всех согласованных образцов привязана к проекту или договору</li>
+                        <li>Контроль выполнения выкрасов для различных заказов</li>
+                        <li>Исключение ошибок при передаче рецептуры в производство</li>
+                    </ul>
+                </div>
+            </div>
+
             <!-- Описание процесса изготовления образцов -->
 <div class="card">
     <div class="card-title">О процессе изготовления образцов</div>
@@ -1098,6 +1288,21 @@
         <div id="finance" class="page">
             <h1 class="page-title">Финансовая отчетность</h1>
 
+            <!-- Блок преимуществ -->
+            <div class="benefits-block">
+                <div class="benefits-shape"></div>
+                <div class="benefits-content">
+                    <h3>Преимущества финансового контроля</h3>
+                    <ul>
+                        <li>Автоматический контроль поступления платежей по графику</li>
+                        <li>Гибкие возможности составления отчетов под различные задачи</li>
+                        <li>Прозрачная система KPI для расчета премий менеджеров</li>
+                        <li>Мгновенные отчеты по движению денежных средств</li>
+                        <li>Контроль дебиторской задолженности с напоминаниями</li>
+                    </ul>
+                </div>
+            </div>
+
             <!-- Описание финансовой системы -->
 <div class="card">
     <div class="card-title">О финансовой отчетности</div>
@@ -1211,6 +1416,21 @@
         <!-- Страница: Единая система хранения информации -->
 <div id="storage" class="page">
     <h1 class="page-title">Единая система хранения информации</h1>
+
+    <!-- Блок преимуществ -->
+    <div class="benefits-block">
+        <div class="benefits-shape"></div>
+        <div class="benefits-content">
+            <h3>Преимущества единой системы хранения</h3>
+            <ul>
+                <li>Все документы по проекту в одном месте</li>
+                <li>Автоматическое создание структуры папок</li>
+                <li>Быстрый поиск нужной информации</li>
+                <li>Контроль версий документов</li>
+                <li>Разграничение прав доступа</li>
+            </ul>
+        </div>
+    </div>
     
     <!-- Описание системы -->
 <div class="card">
@@ -1302,17 +1522,6 @@
     </div>
 </div>
     
-    <!-- Информационный блок -->
-    <div class="info-block">
-        <p><strong>Преимущества единой системы хранения:</strong></p>
-        <p style="margin-top: 10px;">
-            • Все документы по проекту в одном месте<br>
-            • Автоматическое создание структуры папок<br>
-            • Быстрый поиск нужной информации<br>
-            • Контроль версий документов<br>
-            • Разграничение прав доступа
-        </p>
-    </div>
 </div>
     </main>
 
