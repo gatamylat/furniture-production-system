@@ -12,8 +12,12 @@
             --bg-card: #ffffff;
             --text-primary: #2c3e50;
             --text-secondary: #7f8c8d;
+            --text-light: #95a5a6;
             --border: #e1e4e8;
-            --shadow: rgba(0,0,0,0.08);
+            --shadow-sm: 0 2px 8px rgba(0,0,0,0.06);
+            --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 32px rgba(0,0,0,0.12);
+            --shadow-hover: 0 12px 24px rgba(0,0,0,0.15);
             
             /* Цвета процессов в стиле Планфикс */
             --color-sales: #f39c12;
@@ -28,6 +32,26 @@
             --planfix-green: #5cb85c;
             --planfix-orange: #f0ad4e;
             --planfix-red: #d9534f;
+            
+            /* Градиенты */
+            --gradient-blue: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-green: linear-gradient(135deg, #84fab0 0%, #8fd3f4 100%);
+            --gradient-orange: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+            --gradient-purple: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            
+            /* Размеры шрифтов */
+            --font-xs: 11px;
+            --font-sm: 13px;
+            --font-base: 15px;
+            --font-lg: 18px;
+            --font-xl: 24px;
+            --font-2xl: 32px;
+            --font-3xl: 42px;
+            
+            /* Анимации */
+            --transition-fast: 0.2s ease;
+            --transition-base: 0.3s ease;
+            --transition-slow: 0.5s ease;
         }
 
         * {
@@ -38,14 +62,59 @@
 
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-            background-color: var(--bg-secondary);
+            background: linear-gradient(135deg, #f7f8fa 0%, #f0f2f5 100%);
             color: var(--text-primary);
-            line-height: 1.5;
+            line-height: 1.6;
+            font-size: var(--font-base);
         }
 
-        /* Шапка в стиле Планфикс */
+        /* Анимации */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-10px);
+            }
+        }
+
+        /* Шапка */
         .header {
-            background-color: #fff;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
             border-bottom: 1px solid var(--border);
             padding: 15px 30px;
             display: flex;
@@ -56,41 +125,52 @@
             left: 0;
             right: 0;
             z-index: 100;
-            height: 60px;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            height: 70px;
+            box-shadow: var(--shadow-sm);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
         }
 
         .logo {
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 15px;
+            animation: slideInLeft var(--transition-slow);
         }
 
         .logo-icon {
-            width: 36px;
-            height: 36px;
-            background: linear-gradient(135deg, var(--planfix-blue), var(--planfix-green));
-            border-radius: 8px;
+            width: 42px;
+            height: 42px;
+            background: var(--gradient-blue);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
             font-weight: bold;
-            font-size: 18px;
+            font-size: var(--font-lg);
+            box-shadow: var(--shadow-md);
+            transition: transform var(--transition-base);
+        }
+
+        .logo:hover .logo-icon {
+            transform: rotate(5deg) scale(1.1);
         }
 
         .logo-text {
-            font-size: 18px;
-            font-weight: 500;
-            color: var(--text-primary);
+            font-size: var(--font-lg);
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--text-primary), var(--planfix-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         /* Основной контент */
         .main-content {
-            margin-top: 60px;
-            margin-bottom: 60px;
-            padding: 30px;
-            min-height: calc(100vh - 120px);
+            margin-top: 70px;
+            margin-bottom: 70px;
+            padding: 40px;
+            min-height: calc(100vh - 140px);
             max-width: 1400px;
             margin-left: auto;
             margin-right: auto;
@@ -98,6 +178,7 @@
 
         .page {
             display: none;
+            animation: fadeInUp var(--transition-slow);
         }
 
         .page.active {
@@ -105,36 +186,41 @@
         }
 
         .page-title {
-            font-size: 24px;
-            font-weight: 500;
-            margin-bottom: 25px;
-            color: var(--text-primary);
+            font-size: var(--font-3xl);
+            font-weight: 700;
+            margin-bottom: 35px;
+            background: linear-gradient(135deg, var(--text-primary), var(--planfix-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideInLeft var(--transition-slow);
         }
 
-        /* Табы навигации в стиле Планфикс */
+        /* Табы навигации */
         .tabs {
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
-            background-color: #fff;
+            background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
             border-top: 1px solid var(--border);
             display: flex;
             justify-content: center;
             z-index: 100;
-            height: 60px;
-            box-shadow: 0 -1px 3px rgba(0,0,0,0.05);
+            height: 70px;
+            box-shadow: 0 -4px 20px rgba(0,0,0,0.08);
+            backdrop-filter: blur(10px);
+            background: rgba(255, 255, 255, 0.95);
         }
 
         .tab {
             flex: 0 1 200px;
-            padding: 8px 15px;
+            padding: 10px 20px;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: all var(--transition-base);
             border: none;
             background: none;
             color: var(--text-secondary);
@@ -143,7 +229,8 @@
         }
 
         .tab:hover {
-            background-color: var(--bg-secondary);
+            background: linear-gradient(135deg, rgba(74, 144, 226, 0.05), rgba(74, 144, 226, 0.1));
+            transform: translateY(-2px);
         }
 
         .tab.active {
@@ -156,189 +243,322 @@
             top: 0;
             left: 20%;
             right: 20%;
-            height: 3px;
-            background-color: var(--planfix-blue);
+            height: 4px;
+            background: var(--gradient-blue);
+            border-radius: 0 0 4px 4px;
+            animation: pulse 2s infinite;
         }
 
         .tab-icon {
-            width: 24px;
-            height: 24px;
+            width: 28px;
+            height: 28px;
             margin-bottom: 4px;
-            border-radius: 4px;
+            border-radius: 8px;
+            transition: transform var(--transition-base);
+        }
+
+        .tab:hover .tab-icon {
+            transform: scale(1.2) rotate(5deg);
         }
 
         .tab-text {
-            font-size: 12px;
+            font-size: var(--font-xs);
+            font-weight: 500;
             white-space: nowrap;
         }
 
         /* SVG схема процессов */
         .process-diagram {
-            background: #fff;
-            border-radius: 8px;
-            padding: 30px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
-            margin-bottom: 25px;
+            background: linear-gradient(135deg, #ffffff, #f8f9fa);
+            border-radius: 16px;
+            padding: 40px;
+            box-shadow: var(--shadow-lg);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all var(--transition-base);
+            animation: fadeInUp var(--transition-slow);
+        }
+
+        .process-diagram:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-hover);
         }
 
         .process-svg {
             width: 100%;
-            height: 400px;
+            height: 450px;
             max-width: 1200px;
         }
 
-        /* Канбан доски в стиле Планфикс */
+        /* Канбан доски */
         .kanban-board {
             display: flex;
             gap: 20px;
             overflow-x: auto;
-            padding: 20px 0;
-            background: #fff;
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 25px;
+            padding: 25px 10px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(248,249,250,0.9));
+            border-radius: 16px;
+            margin-bottom: 30px;
+            box-shadow: var(--shadow-md);
+            animation: fadeInUp var(--transition-slow);
         }
 
         .kanban-column {
-            min-width: 280px;
-            background: var(--bg-secondary);
-            border-radius: 6px;
-            padding: 15px;
+            min-width: 300px;
+            background: linear-gradient(135deg, var(--bg-secondary), #ffffff);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+        }
+
+        .kanban-column:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
         }
 
         .kanban-header {
-            font-weight: 600;
-            margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 4px;
+            font-weight: 700;
+            font-size: var(--font-base);
+            margin-bottom: 20px;
+            padding: 12px;
+            border-radius: 8px;
             text-align: center;
             color: white;
-            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            box-shadow: var(--shadow-sm);
         }
 
         .kanban-card {
-            background: #fff;
+            background: linear-gradient(135deg, #ffffff, #fafbfc);
             border: 1px solid var(--border);
-            border-radius: 4px;
-            padding: 12px;
-            margin-bottom: 10px;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 12px;
             cursor: pointer;
-            transition: all 0.2s ease;
-            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kanban-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-blue);
+            transform: translateX(-100%);
+            transition: transform var(--transition-base);
+        }
+
+        .kanban-card:hover::before {
+            transform: translateX(0);
         }
 
         .kanban-card:hover {
-            box-shadow: 0 3px 8px rgba(0,0,0,0.12);
-            transform: translateY(-1px);
+            box-shadow: var(--shadow-md);
+            transform: translateY(-3px) scale(1.02);
+            background: linear-gradient(135deg, #ffffff, #f0f8ff);
         }
 
         .kanban-card-title {
             font-weight: 600;
-            font-size: 14px;
-            margin-bottom: 5px;
+            font-size: var(--font-base);
+            margin-bottom: 8px;
             color: var(--text-primary);
         }
 
         .kanban-card-info {
-            font-size: 13px;
+            font-size: var(--font-sm);
             color: var(--text-secondary);
-            margin-bottom: 3px;
+            margin-bottom: 5px;
         }
 
         .kanban-card-meta {
-            font-size: 11px;
-            color: #95a5a6;
+            font-size: var(--font-xs);
+            color: var(--text-light);
         }
 
-        /* Кнопки в стиле Планфикс */
+        /* Кнопки */
         .btn {
-            padding: 10px 20px;
-            background: var(--planfix-blue);
+            padding: 14px 28px;
+            background: var(--gradient-blue);
             color: white;
             border: none;
-            border-radius: 4px;
+            border-radius: 10px;
             cursor: pointer;
-            font-size: 14px;
-            font-weight: 500;
-            transition: all 0.2s ease;
-            margin: 10px 0;
+            font-size: var(--font-base);
+            font-weight: 600;
+            transition: all var(--transition-base);
+            margin: 15px 0;
+            box-shadow: var(--shadow-md);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
         .btn:hover {
-            background: #357abd;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-lg);
         }
 
-        /* Карточки в стиле Планфикс */
+        /* Карточки */
         .card {
-            background: #fff;
-            border-radius: 8px;
-            padding: 25px;
-            margin-bottom: 20px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            background: linear-gradient(135deg, #ffffff, #fafbfc);
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+            animation: fadeInUp var(--transition-slow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(45deg, transparent, rgba(74, 144, 226, 0.03), transparent);
+            transform: rotate(45deg);
+            transition: all 0.5s;
+        }
+
+        .card:hover::before {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
         }
 
         .card-title {
-            font-size: 18px;
-            font-weight: 500;
-            margin-bottom: 20px;
+            font-size: var(--font-xl);
+            font-weight: 700;
+            margin-bottom: 25px;
             color: var(--text-primary);
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 10px;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 15px;
+            background: linear-gradient(135deg, var(--text-primary), var(--planfix-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
-        /* Таблицы в стиле Планфикс */
+        /* Таблицы */
         .table {
             width: 100%;
-            border-collapse: collapse;
-            margin-top: 15px;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 20px;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: var(--shadow-sm);
         }
 
         .table th,
         .table td {
-            padding: 12px;
+            padding: 15px;
             text-align: left;
-            border-bottom: 1px solid var(--border);
-            font-size: 14px;
+            font-size: var(--font-sm);
+            transition: all var(--transition-fast);
         }
 
         .table th {
-            background: var(--bg-secondary);
-            font-weight: 600;
-            color: var(--text-primary);
+            background: linear-gradient(135deg, var(--planfix-blue), #5a9fd4);
+            font-weight: 700;
+            color: white;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-size: var(--font-xs);
+        }
+
+        .table tr {
+            background: white;
+            transition: all var(--transition-fast);
+        }
+
+        .table tr:nth-child(even) {
+            background: linear-gradient(135deg, #fafbfc, #f7f8fa);
         }
 
         .table tr:hover {
-            background: var(--bg-secondary);
+            background: linear-gradient(135deg, #e8f4fd, #f0f8ff);
+            transform: scale(1.01);
+            box-shadow: var(--shadow-sm);
         }
 
-        /* График Gantt в стиле Планфикс */
+        .table td {
+            border-bottom: 1px solid var(--border);
+        }
+
+        /* График Gantt */
         .gantt-chart {
             overflow-x: auto;
-            background: #fff;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            background: linear-gradient(135deg, #ffffff, #fafbfc);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            animation: fadeInUp var(--transition-slow);
         }
 
         .gantt-header {
             display: flex;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 10px;
-            margin-bottom: 15px;
+            background: linear-gradient(135deg, var(--planfix-blue), #5a9fd4);
+            padding: 15px;
+            border-radius: 10px 10px 0 0;
+            margin-bottom: 0;
+            color: white;
+            font-weight: 700;
+            font-size: var(--font-sm);
         }
 
         .gantt-row {
             display: flex;
             align-items: center;
-            padding: 10px 0;
-            border-bottom: 1px solid #f0f0f0;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border);
+            transition: all var(--transition-fast);
+        }
+
+        .gantt-row:hover {
+            background: linear-gradient(135deg, #f0f8ff, #e8f4fd);
+            transform: translateX(5px);
         }
 
         .gantt-label {
-            min-width: 180px;
+            min-width: 200px;
             padding-right: 20px;
-            font-size: 14px;
+            font-size: var(--font-sm);
+            font-weight: 600;
             color: var(--text-primary);
         }
 
@@ -346,204 +566,484 @@
             display: flex;
             flex: 1;
             position: relative;
-            height: 35px;
+            height: 40px;
             align-items: center;
         }
 
         .gantt-bar {
-            height: 30px;
-            border-radius: 4px;
+            height: 35px;
+            border-radius: 8px;
             display: flex;
             align-items: center;
-            padding: 0 10px;
+            padding: 0 12px;
             color: white;
-            font-size: 12px;
+            font-size: var(--font-xs);
+            font-weight: 600;
             white-space: nowrap;
             position: absolute;
-            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
         }
 
-        /* Форма в стиле Планфикс */
+        .gantt-bar:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: var(--shadow-md);
+            z-index: 10;
+        }
+
+        /* Форма */
         .form-group {
-            margin-bottom: 20px;
+            margin-bottom: 25px;
         }
 
         .form-label {
             display: block;
-            margin-bottom: 8px;
-            font-size: 14px;
-            font-weight: 500;
+            margin-bottom: 10px;
+            font-size: var(--font-sm);
+            font-weight: 600;
             color: var(--text-primary);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
 
         .form-input {
             width: 100%;
-            padding: 10px 12px;
-            border: 1px solid var(--border);
-            border-radius: 4px;
-            background: #fff;
+            padding: 14px 16px;
+            border: 2px solid var(--border);
+            border-radius: 10px;
+            background: linear-gradient(135deg, #ffffff, #fafbfc);
             color: var(--text-primary);
-            font-size: 14px;
-            transition: border-color 0.2s ease;
+            font-size: var(--font-base);
+            transition: all var(--transition-base);
         }
 
         .form-input:focus {
             outline: none;
             border-color: var(--planfix-blue);
+            background: white;
+            box-shadow: 0 0 0 4px rgba(74, 144, 226, 0.1);
+            transform: translateY(-2px);
         }
 
-        /* Прогресс бар в стиле Планфикс */
+        /* Прогресс бар */
         .progress-bar {
             width: 100%;
-            height: 24px;
-            background: #ecf0f1;
-            border-radius: 4px;
+            height: 30px;
+            background: linear-gradient(135deg, #ecf0f1, #e8e9ea);
+            border-radius: 15px;
             overflow: hidden;
-            margin: 10px 0;
+            margin: 12px 0;
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
         }
 
         .progress-fill {
             height: 100%;
-            background: linear-gradient(90deg, var(--planfix-green), var(--planfix-blue));
-            border-radius: 4px;
-            transition: width 0.3s ease;
+            background: var(--gradient-blue);
+            border-radius: 15px;
+            transition: width var(--transition-slow);
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 12px;
-            font-weight: 500;
+            font-size: var(--font-sm);
+            font-weight: 700;
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            100% {
+                left: 100%;
+            }
         }
 
         /* Информационный блок */
         .info-block {
-            background: #f0f8ff;
-            border-left: 4px solid var(--planfix-blue);
-            padding: 15px 20px;
-            margin: 20px 0;
-            border-radius: 4px;
+            background: linear-gradient(135deg, #e8f4fd, #f0f8ff);
+            border-left: 5px solid var(--planfix-blue);
+            padding: 20px 25px;
+            margin: 25px 0;
+            border-radius: 10px;
+            box-shadow: var(--shadow-sm);
+            transition: all var(--transition-base);
+            animation: slideInLeft var(--transition-slow);
         }
-        /* СТИЛИ ДЛЯ БЛОКОВ ПРЕИМУЩЕСТВ */
-.benefits-block {
-    border-radius: 8px;
-    padding: 20px 25px;
-    margin: 20px 0;
-    position: relative;
-    overflow: hidden;
-    transition: all 0.3s ease;
-    cursor: pointer;
-    display: none; /* Скрываем все блоки по умолчанию */
-}
 
-/* Показываем только нужный блок на активной странице */
-.page.active .benefits-block {
-    display: block;
-}
-
-.benefits-block:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0,0,0,0.12);
-}
-
-.benefits-block:hover .benefits-shape {
-    transform: rotate(10deg) scale(1.05);
-}
-
-.benefits-shape {
-    position: absolute;
-    width: 200px;
-    height: 200px;
-    background: rgba(255, 255, 255, 0.08);
-    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
-    top: -80px;
-    right: -80px;
-    transition: all 0.5s ease;
-}
-
-.benefits-content {
-    position: relative;
-    z-index: 1;
-}
-
-.benefits-content h3 {
-    color: white;
-    font-size: 18px;
-    font-weight: 600;
-    margin-bottom: 15px;
-    text-shadow: 0 1px 4px rgba(0,0,0,0.2);
-}
-
-.benefits-content ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.benefits-content li {
-    color: rgba(255, 255, 255, 0.95);
-    font-size: 14px;
-    line-height: 1.6;
-    margin-bottom: 8px;
-    padding-left: 20px;
-    position: relative;
-}
-
-.benefits-content li:before {
-    content: "•";
-    position: absolute;
-    left: 0;
-    font-size: 16px;
-    color: rgba(255, 255, 255, 0.6);
-}
-
-/* Градиенты для каждого раздела */
-#overview .benefits-block {
-    background: linear-gradient(135deg, #764ba2 0%, #3353e4 100%);
-}
-
-#sales .benefits-block {
-    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
-}
-
-#design .benefits-block {
-    background: linear-gradient(135deg, #2fa858 0%, #33f771 100%);
-}
-
-#production .benefits-block {
-    background: linear-gradient(135deg, #329efc 0%, #01c8d3 100%);
-}
-
-#samples .benefits-block {
-    background: linear-gradient(135deg, #02e64e 0%, #38f9d7 100%);
-}
-
-#finance .benefits-block {
-    background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
-}
-
-#storage .benefits-block {
-    background: linear-gradient(135deg, #9944ba 0%, #512e5f 100%);
-}
-
-@media (max-width: 768px) {
-    .benefits-block {
-        padding: 15px 20px;
-    }
-    
-    .benefits-content h3 {
-        font-size: 16px;
-    }
-    
-    .benefits-content li {
-        font-size: 13px;
-    }
-}
+        .info-block:hover {
+            transform: translateX(10px);
+            box-shadow: var(--shadow-md);
+        }
 
         .info-block p {
             margin: 0;
             color: var(--text-primary);
-            font-size: 14px;
+            font-size: var(--font-base);
+            line-height: 1.7;
         }
+
+        /* СТИЛИ ДЛЯ БЛОКОВ ПРЕИМУЩЕСТВ */
+        .benefits-block {
+            border-radius: 16px;
+            padding: 30px 35px;
+            margin: 30px 0;
+            position: relative;
+            overflow: hidden;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            display: none;
+            box-shadow: var(--shadow-lg);
+            animation: fadeInUp var(--transition-slow);
+        }
+
+        .page.active .benefits-block {
+            display: block;
+        }
+
+       .benefits-block:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-hover);
+}
+
+.benefits-shape {
+    position: absolute;
+    width: 250px;
+    height: 250px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+    top: -100px;
+    right: -100px;
+    transition: all var(--transition-slow);
+}
+
+        .benefits-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .benefits-content h3 {
+            color: white;
+            font-size: var(--font-xl);
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .benefits-content ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .benefits-content li {
+            color: rgba(255, 255, 255, 0.95);
+            font-size: var(--font-base);
+            line-height: 1.8;
+            margin-bottom: 12px;
+            padding-left: 28px;
+            position: relative;
+        }
+
+        .benefits-content li:before {
+            content: "✦";
+            position: absolute;
+            left: 0;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Градиенты для каждого раздела */
+        #overview .benefits-block {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+
+        #sales .benefits-block {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        }
+
+        #design .benefits-block {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        #production .benefits-block {
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+        }
+
+        #samples .benefits-block {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        #finance .benefits-block {
+            background: linear-gradient(135deg, #30cfd0 0%, #330867 100%);
+        }
+
+        #storage .benefits-block {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+        }
+
+        /* Мобильная версия */
+        @media (max-width: 768px) {
+            :root {
+                --font-xs: 10px;
+                --font-sm: 12px;
+                --font-base: 14px;
+                --font-lg: 16px;
+                --font-xl: 20px;
+                --font-2xl: 26px;
+                --font-3xl: 32px;
+            }
+
+            .header {
+                padding: 12px 20px;
+                height: 60px;
+            }
+
+            .logo-icon {
+                width: 36px;
+                height: 36px;
+            }
+
+            .logo-text {
+                font-size: var(--font-base);
+                display: none;
+            }
+
+            .main-content {
+                margin-top: 60px;
+                margin-bottom: 60px;
+                padding: 20px;
+            }
+
+            .page-title {
+                font-size: var(--font-2xl);
+                margin-bottom: 20px;
+            }
+
+            .tabs {
+                height: 60px;
+                overflow-x: auto;
+                justify-content: flex-start;
+                padding: 0 10px;
+            }
+
+            .tab {
+                flex: 0 0 auto;
+                min-width: 70px;
+                padding: 8px 12px;
+            }
+
+            .tab-icon {
+                width: 24px;
+                height: 24px;
+            }
+
+            .tab-text {
+                font-size: 10px;
+            }
+
+            .process-diagram {
+                padding: 20px;
+            }
+
+            .process-svg {
+                height: 300px;
+            }
+
+            .kanban-board {
+                padding: 15px 5px;
+                gap: 15px;
+            }
+
+            .kanban-column {
+                min-width: 250px;
+                padding: 15px;
+            }
+
+            .card {
+                padding: 20px;
+                margin-bottom: 20px;
+            }
+
+            .card-title {
+                font-size: var(--font-lg);
+                margin-bottom: 15px;
+                padding-bottom: 10px;
+            }
+
+            .benefits-block {
+                padding: 20px 25px;
+                margin: 20px 0;
+            }
+
+            .benefits-content h3 {
+                font-size: var(--font-lg);
+                margin-bottom: 15px;
+            }
+
+            .benefits-content li {
+                font-size: var(--font-sm);
+                margin-bottom: 8px;
+                padding-left: 20px;
+            }
+
+            .benefits-shape {
+                width: 150px;
+                height: 150px;
+                top: -60px;
+                right: -60px;
+            }
+
+            .table {
+                font-size: var(--font-xs);
+            }
+
+            .table th,
+            .table td {
+                padding: 10px 8px;
+            }
+
+            .gantt-chart {
+                padding: 15px;
+            }
+
+            .gantt-label {
+                min-width: 120px;
+                font-size: var(--font-xs);
+            }
+
+            .gantt-bar {
+                height: 28px;
+                padding: 0 8px;
+                font-size: 10px;
+            }
+
+            .btn {
+                padding: 12px 20px;
+                font-size: var(--font-sm);
+            }
+
+            .form-input {
+                padding: 12px 14px;
+                font-size: var(--font-sm);
+            }
+
+            .progress-bar {
+                height: 25px;
+            }
+
+            .info-block {
+                padding: 15px 20px;
+            }
+
+            /* Скрываем некоторые элементы на мобильных */
+            .gantt-header > div:not(:first-child) span {
+                font-size: 10px;
+            }
+
+            /* Адаптация модального окна */
+            #modal {
+                padding: 10px;
+            }
+
+            #modal .modal-content {
+                padding: 25px;
+                max-height: 85vh;
+            }
+
+            #modal h2 {
+                font-size: var(--font-lg);
+            }
+
+            #modal h3 {
+                font-size: var(--font-base);
+            }
+        }
+
+        /* Планшеты */
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .main-content {
+                padding: 30px;
+            }
+
+            .kanban-column {
+                min-width: 260px;
+            }
+
+            .logo-text {
+                font-size: var(--font-base);
+            }
+        }
+
+        /* Анимация для карточек при скролле */
+        .animate-on-scroll {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s ease;
+        }
+
+        .animate-on-scroll.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Дополнительные эффекты для интерактивности */
+        .interactive-element {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .interactive-element::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(74, 144, 226, 0.1);
+            transform: translate(-50%, -50%);
+            transition: width 0.4s, height 0.4s;
+        }
+
+        .interactive-element:hover::after {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Красивые тени для заголовков */
+        .shadow-text {
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        /* Эффект стекла для некоторых элементов */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        /* Отключение овалов при наведении */
+.benefits-shape {
+    display: none !important;
+}
+
+.interactive-element::after,
+.card::before,
+.kanban-card::before {
+    display: none !important;
+}
     </style>
 </head>
 <body>
@@ -562,9 +1062,9 @@
             <h1 class="page-title">Обзор системы</h1>
             
             <!-- Описание структуры системы -->
-            <div class="card">
+            <div class="card interactive-element">
                 <div class="card-title">Структура системы</div>
-                <div style="color: #2c3e50; line-height: 1.8; font-size: 14px;">
+                <div style="color: #2c3e50; line-height: 1.8; font-size: 15px;">
                     <div style="margin-bottom: 15px;">
                         <strong>Основные процессы:</strong> Система графически отображает основные процессы, происходящие в организации. К ним относятся:
                     </div>
@@ -576,7 +1076,6 @@
                         <li style="margin-bottom: 8px;">Дополнительный постоянный процесс изготовления выкрасов и образцов.</li>
                         <li style="margin-bottom: 8px;">Система построена на принципах канбан-методологии с полной прослеживаемостью всех этапов работы.</li>
                         <li style="margin-bottom: 8px;">Это реализованная система с примерами процессов и статусов, применяемых в организации; в теории они могут быть любыми.</li>
-                        
                     </ul>
                 </div>
             </div>
@@ -585,18 +1084,18 @@
             
             <!-- SVG схема процессов -->
             <div class="process-diagram">
-                <svg class="process-svg" viewBox="0 0 1200 480" style="cursor: pointer; height: 400px;">
+                <svg class="process-svg" viewBox="0 0 1200 480" style="cursor: pointer;">
                     <!-- Первый уровень -->
                     <!-- Входящие заявки -->
                     <g onclick="switchTab('sales')" style="cursor: pointer;">
-                        <rect x="50" y="50" width="200" height="80" rx="4" fill="#f39c12" opacity="0.95"/>
+                        <rect x="50" y="50" width="200" height="80" rx="8" fill="#f39c12" opacity="0.95"/>
                         <text x="150" y="85" text-anchor="middle" fill="white" font-weight="600" font-size="15">Входящие заявки</text>
                         <text x="150" y="105" text-anchor="middle" fill="white" font-size="12">Telegram, WhatsApp, Email</text>
                     </g>
                     
                     <!-- Единая система хранения -->
                     <g onclick="switchTab('storage')" style="cursor: pointer;">
-                        <rect x="500" y="50" width="200" height="80" rx="4" fill="#9b59b6" opacity="0.95"/>
+                        <rect x="500" y="50" width="200" height="80" rx="8" fill="#9b59b6" opacity="0.95"/>
                         <text x="600" y="75" text-anchor="middle" fill="white" font-weight="600" font-size="15">Единая система</text>
                         <text x="600" y="95" text-anchor="middle" fill="white" font-size="12">хранения информации</text>
                         <text x="600" y="113" text-anchor="middle" fill="white" font-size="11">Заказчик/Проект/Договор</text>
@@ -604,77 +1103,77 @@
                     
                     <!-- Финансовая отчетность -->
                     <g onclick="switchTab('finance')" style="cursor: pointer;">
-                        <rect x="950" y="50" width="200" height="80" rx="4" fill="#2980b9" opacity="0.95"/>
+                        <rect x="950" y="50" width="200" height="80" rx="8" fill="#2980b9" opacity="0.95"/>
                         <text x="1050" y="85" text-anchor="middle" fill="white" font-weight="600" font-size="15">Финансовая</text>
                         <text x="1050" y="105" text-anchor="middle" fill="white" font-size="12">отчетность</text>
                     </g>
                     
                     <!-- Второй уровень - Канбан доски -->
                     <g onclick="switchTab('sales')" style="cursor: pointer;">
-                        <rect x="50" y="200" width="200" height="80" rx="4" fill="#f39c12" opacity="0.95"/>
+                        <rect x="50" y="200" width="200" height="80" rx="8" fill="#f39c12" opacity="0.95"/>
                         <text x="150" y="235" text-anchor="middle" fill="white" font-weight="600" font-size="15">Обработка заявок</text>
                         <text x="150" y="255" text-anchor="middle" fill="white" font-size="12">Канбан-доска</text>
                     </g>
                     
                     <g onclick="switchTab('design')" style="cursor: pointer;">
-                        <rect x="275" y="200" width="200" height="80" rx="4" fill="#27ae60" opacity="0.95"/>
+                        <rect x="275" y="200" width="200" height="80" rx="8" fill="#27ae60" opacity="0.95"/>
                         <text x="375" y="235" text-anchor="middle" fill="white" font-weight="600" font-size="15">Проектирование</text>
                         <text x="375" y="255" text-anchor="middle" fill="white" font-size="12">Канбан-доска</text>
                     </g>
                     
                     <g onclick="switchTab('production')" style="cursor: pointer;">
-                        <rect x="500" y="200" width="200" height="80" rx="4" fill="#3498db" opacity="0.95"/>
+                        <rect x="500" y="200" width="200" height="80" rx="8" fill="#3498db" opacity="0.95"/>
                         <text x="600" y="235" text-anchor="middle" fill="white" font-weight="600" font-size="15">Производство</text>
                         <text x="600" y="255" text-anchor="middle" fill="white" font-size="12">и монтаж</text>
                     </g>
                     
                     <g style="cursor: pointer;">
-                        <rect x="725" y="200" width="200" height="80" rx="4" fill="#e74c3c" opacity="0.95"/>
+                        <rect x="725" y="200" width="200" height="80" rx="8" fill="#e74c3c" opacity="0.95"/>
                         <text x="825" y="235" text-anchor="middle" fill="white" font-weight="600" font-size="15">Рекламации</text>
                         <text x="825" y="255" text-anchor="middle" fill="white" font-size="12">Канбан-доска</text>
                     </g>
                     
                     <g onclick="switchTab('samples')" style="cursor: pointer;">
-                        <rect x="950" y="200" width="200" height="80" rx="4" fill="#2ecc71" opacity="0.95"/>
+                        <rect x="950" y="200" width="200" height="80" rx="8" fill="#2ecc71" opacity="0.95"/>
                         <text x="1050" y="235" text-anchor="middle" fill="white" font-weight="600" font-size="15">Выкрасы</text>
                         <text x="1050" y="255" text-anchor="middle" fill="white" font-size="12">и образцы</text>
                     </g>
                     
                     <!-- Третий уровень - План-графики -->
                     <g onclick="switchTab('design')" style="cursor: pointer;">
-                        <rect x="275" y="350" width="200" height="80" rx="4" fill="#95a5a6" opacity="0.95"/>
+                        <rect x="275" y="350" width="200" height="80" rx="8" fill="#95a5a6" opacity="0.95"/>
                         <text x="375" y="385" text-anchor="middle" fill="white" font-weight="600" font-size="15">План-график</text>
                         <text x="375" y="405" text-anchor="middle" fill="white" font-size="12">проектирования</text>
                     </g>
                     
                     <g onclick="switchTab('production')" style="cursor: pointer;">
-                        <rect x="500" y="350" width="200" height="80" rx="4" fill="#95a5a6" opacity="0.95"/>
+                        <rect x="500" y="350" width="200" height="80" rx="8" fill="#95a5a6" opacity="0.95"/>
                         <text x="600" y="385" text-anchor="middle" fill="white" font-weight="600" font-size="15">План-график</text>
                         <text x="600" y="405" text-anchor="middle" fill="white" font-size="12">производства</text>
                     </g>
                     
                     <!-- Стрелки - строго вертикальные и горизонтальные -->
                     <!-- От входящих заявок вниз -->
-                    <path d="M 150 130 L 150 200" stroke="#f39c12" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 150 130 L 150 200" stroke="#f39c12" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
                     
                     <!-- От входящих заявок к единой системе -->
-                    <path d="M 250 90 L 500 90" stroke="#9b59b6" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 250 90 L 500 90" stroke="#9b59b6" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
                     
                     <!-- От единой системы к финансам -->
-                    <path d="M 700 90 L 950 90" stroke="#2980b9" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 700 90 L 950 90" stroke="#2980b9" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
                     
                     <!-- От единой системы вниз -->
-                    <path d="M 600 130 L 600 200" stroke="#9b59b6" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 600 130 L 600 200" stroke="#9b59b6" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
                     
                     <!-- Горизонтальные между канбанами -->
-                    <path d="M 250 240 L 275 240" stroke="#27ae60" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
-                    <path d="M 475 240 L 500 240" stroke="#3498db" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
-                    <path d="M 700 240 L 725 240" stroke="#e74c3c" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
-                    <path d="M 925 240 L 950 240" stroke="#2ecc71" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 250 240 L 275 240" stroke="#27ae60" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 475 240 L 500 240" stroke="#3498db" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 700 240 L 725 240" stroke="#e74c3c" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 925 240 L 950 240" stroke="#2ecc71" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
                     
                     <!-- К план-графикам -->
-                    <path d="M 375 280 L 375 350" stroke="#95a5a6" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
-                    <path d="M 600 280 L 600 350" stroke="#95a5a6" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 375 280 L 375 350" stroke="#95a5a6" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
+                    <path d="M 600 280 L 600 350" stroke="#95a5a6" stroke-width="3" fill="none" marker-end="url(#arrowhead)"/>
                     
                     <!-- Маркер стрелки -->
                     <defs>
@@ -690,6 +1189,7 @@
                 <p><strong>Интерактивная схема процессов</strong></p>
                 <p style="margin-top: 8px;">Кликните на любой блок диаграммы для перехода к детальному просмотру раздела.</p>
             </div>
+            
             <!-- Блок преимуществ -->
             <div class="benefits-block">
                 <div class="benefits-shape"></div>
@@ -726,9 +1226,9 @@
             </div>
             
             <!-- Описание процесса обработки заявок -->
-            <div class="card">
+            <div class="card interactive-element">
                 <div class="card-title">Процесс обработки входящих заявок</div>
-                <div style="color: #2c3e50; line-height: 1.8; font-size: 14px;">
+                <div style="color: #2c3e50; line-height: 1.8; font-size: 15px;">
                     <div style="margin-bottom: 15px;">
                         <strong>1. Интеграция каналов связи:</strong> В систему интегрированы мессенджеры и почтовые ящики.
                     </div>
@@ -749,7 +1249,7 @@
             
             <div class="kanban-board">
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #f39c12;">Новая заявка</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #f39c12, #f5576c);">Новая заявка</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Кухня премиум класса</div>
                         <div class="kanban-card-info">Иванов Иван Иванович</div>
@@ -763,7 +1263,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #f0ad4e;">В работе</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #f0ad4e, #feca57);">В работе</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Мебель для гостиной</div>
                         <div class="kanban-card-info">Сидоров К.М.</div>
@@ -772,7 +1272,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #5bc0de;">Выставлено КП</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #5bc0de, #00d2ff);">Выставлено КП</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Детская комната</div>
                         <div class="kanban-card-info">Козлова О.В.</div>
@@ -786,7 +1286,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #f0ad4e;">Ожидание (теплое)</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #f0ad4e, #f5576c);">Ожидание (теплое)</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Кухня в стиле модерн</div>
                         <div class="kanban-card-info">Морозов П.Д.</div>
@@ -795,7 +1295,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #5cb85c;">Согласована</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #5cb85c, #00d672);">Согласована</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Спальный гарнитур люкс</div>
                         <div class="kanban-card-info">Белова Е.Е.</div>
@@ -804,7 +1304,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #d9534f;">Сделка провалена</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #d9534f, #c0392b);">Сделка провалена</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Прихожая</div>
                         <div class="kanban-card-info">Комаров А.В.</div>
@@ -834,9 +1334,9 @@
             </div>
             
             <!-- Описание процесса проектирования -->
-            <div class="card">
+            <div class="card interactive-element">
                 <div class="card-title">Процесс проектирования</div>
-                <div style="color: #2c3e50; line-height: 1.8; font-size: 14px;">
+                <div style="color: #2c3e50; line-height: 1.8; font-size: 15px;">
                     <div style="margin-bottom: 15px;">
                         <strong>1. Добавление изделия:</strong> Менеджер добавляет в соответствующий раздел нового договора изделия и их карточки.
                     </div>
@@ -850,7 +1350,7 @@
                         <strong>4. Личное рабочее пространство:</strong> Исполнитель может видеть свой график работы, обычно на ближайший месяц, через личное рабочее пространство.
                     </div>
                     <div style="margin-bottom: 15px;">
-                        <strong>5. Результаты и проверка:</strong> После того как изделие начерчено, конструктор размещает результаты в карточке соответсвующей задачи, которую проверяют менеджер и главный конструктор.
+                        <strong>5. Результаты и проверка:</strong> После того как изделие начерчено, конструктор размещает результаты в карточке соответствующей задачи, которую проверяют менеджер и главный конструктор.
                     </div>
                     <div style="margin-bottom: 15px;">
                         <strong>6. Перемещение в производство:</strong> Если чертеж согласован заказчиком и разработано РД, карточка изделия перемещается в процесс производства и монтажа.
@@ -860,7 +1360,7 @@
             
             <div class="kanban-board">
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #27ae60;">Заключен договор</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #27ae60, #00d672);">Заключен договор</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Проект №2024-156</div>
                         <div class="kanban-card-info">Кухня • Белова Е.Е.</div>
@@ -869,7 +1369,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #5cb85c;">Назначен конструктор</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #5cb85c, #2ecc71);">Назначен конструктор</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Проект №2024-155</div>
                         <div class="kanban-card-info">Гардероб • Смирнов И.П.</div>
@@ -878,7 +1378,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #3498db;">Разработка Эскиза</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #3498db, #2980b9);">Разработка Эскиза</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Проект №2024-154</div>
                         <div class="kanban-card-info">Офис • ООО "Стиль"</div>
@@ -887,7 +1387,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #f0ad4e;">На проверке</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #f0ad4e, #f39c12);">На проверке</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Проект №2024-153</div>
                         <div class="kanban-card-info">Спальня • Козлов А.А.</div>
@@ -896,7 +1396,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #5bc0de;">Согласование с заказчиком</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #5bc0de, #3498db);">Согласование с заказчиком</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Проект №2024-152</div>
                         <div class="kanban-card-info">Кухня • Петров В.В.</div>
@@ -905,7 +1405,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #5cb85c;">Разработка РД</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #5cb85c, #27ae60);">Разработка РД</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Проект №2024-151</div>
                         <div class="kanban-card-info">Детская • Иванова М.М.</div>
@@ -915,7 +1415,7 @@
             </div>
             
             <!-- График загрузки проектировщиков -->
-            <div class="card">
+            <div class="card interactive-element">
                 <div class="card-title">План-график проектировщиков на январь 2025</div>
                 <div class="gantt-chart">
                     <div class="gantt-header">
@@ -930,22 +1430,22 @@
                     <div class="gantt-row">
                         <div class="gantt-label">Михаил Сергеев</div>
                         <div class="gantt-timeline">
-                            <div class="gantt-bar" style="background: #27ae60; left: 10%; width: 25%;">Проект №155</div>
-                            <div class="gantt-bar" style="background: #3498db; left: 40%; width: 30%;">Проект №158</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #27ae60, #2ecc71); left: 10%; width: 25%;">Проект №155</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #3498db, #2980b9); left: 40%; width: 30%;">Проект №158</div>
                         </div>
                     </div>
                     <div class="gantt-row">
                         <div class="gantt-label">Анна Белова</div>
                         <div class="gantt-timeline">
-                            <div class="gantt-bar" style="background: #3498db; left: 0; width: 35%;">Проект №154</div>
-                            <div class="gantt-bar" style="background: #f39c12; left: 40%; width: 25%;">Проект №159</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #3498db, #5bc0de); left: 0; width: 35%;">Проект №154</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #f39c12, #f0ad4e); left: 40%; width: 25%;">Проект №159</div>
                         </div>
                     </div>
                     <div class="gantt-row">
                         <div class="gantt-label">Сергей Павлов</div>
                         <div class="gantt-timeline">
-                            <div class="gantt-bar" style="background: #e74c3c; left: 20%; width: 20%;">Проект №153</div>
-                            <div class="gantt-bar" style="background: #27ae60; left: 45%; width: 35%;">Проект №160</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #e74c3c, #c0392b); left: 20%; width: 20%;">Проект №153</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #27ae60, #2ecc71); left: 45%; width: 35%;">Проект №160</div>
                         </div>
                     </div>
                 </div>
@@ -972,9 +1472,9 @@
             </div>
             
             <!-- Описание процесса производства -->
-            <div class="card">
+            <div class="card interactive-element">
                 <div class="card-title">Процесс производства</div>
-                <div style="color: #2c3e50; line-height: 1.8; font-size: 14px;">
+                <div style="color: #2c3e50; line-height: 1.8; font-size: 15px;">
                     <div style="margin-bottom: 15px;">
                         <strong>1. Подготовка документации:</strong> После проектирования и подписания чертежей, менеджер собирает всю необходимую документацию, аккумулирует её в карточке изделия и перемещает на канбан-доску производства.
                     </div>
@@ -982,7 +1482,7 @@
                         <strong>2. Проверка и задания:</strong> Начальник производства получает и проверяет входящую документацию, на основе которой готовит задания для исполнителей в цеху.
                     </div>
                     <div style="margin-bottom: 15px;">
-                        <strong>3. Производственные задачи:</strong> Система автоматически добавляет в карточку изделия задачи по производственным процессам, которые формируются и дополняют график работ по производству.
+                        <strong>3. Производственные задачи:</strong> Система автоматически добавляет в карточку изделия задачи по производственным процессам, которые формируют и дополняют график работ по производству.
                     </div>
                     <div style="margin-bottom: 15px;">
                         <strong>4. Личные графики исполнителей (теоретически):</strong> В теории, система могла бы формировать личный график любого исполнителя в цеху (столяра, маляра, шлифовщика, упаковщика) и монтажника, но на практике это не используется.
@@ -991,14 +1491,14 @@
                         <strong>5. Движение по статусам и оповещения:</strong> Изделие проходит от статуса к статусу (например, проверено начальником производства, шлифовка, столярка, малярка, упаковка, склад). Статусы меняются вручную начальником производства. При смене статусов система оповещает о произошедших изменениях и напоминает о необходимых действиях.
                     </div>
                     <div style="margin-bottom: 15px;">
-                        <strong>6. Завершение заказа:</strong> После успешного монтажа система оповещает менеджера, который подписывает закрывающие документы и завершает заказ, отправляя его в архив.
+                        <strong>6. Завершение заказа:</strong> После успешного монтажа система оповещает менеджера, который подписывает закрывающие документы, проект переводится в архив.
                     </div>
                 </div>
             </div>
             
             <div class="kanban-board">
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #3498db;">Проверено нач. производства</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #3498db, #2980b9);">Проверено нач. производства</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Заказ №2024-151</div>
                         <div class="kanban-card-info">Кухня классика</div>
@@ -1007,7 +1507,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #8b6f47;">Столярный цех</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #8b6f47, #a0826d);">Столярный цех</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Заказ №2024-150</div>
                         <div class="kanban-card-info">Шкаф-купе</div>
@@ -1021,7 +1521,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #d4a76a;">Шлифовальный участок</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #d4a76a, #daa520);">Шлифовальный участок</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Заказ №2024-148</div>
                         <div class="kanban-card-info">Стол обеденный</div>
@@ -1030,7 +1530,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #9370db;">Покрасочный цех</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #9370db, #8a2be2);">Покрасочный цех</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Заказ №2024-147</div>
                         <div class="kanban-card-info">Тумба под ТВ</div>
@@ -1039,7 +1539,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #f0ad4e;">Упаковка</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #f0ad4e, #f39c12);">Упаковка</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Заказ №2024-146</div>
                         <div class="kanban-card-info">Кровать двуспальная</div>
@@ -1048,7 +1548,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #708090;">Склад готовой продукции</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #708090, #778899);">Склад готовой продукции</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Заказ №2024-145</div>
                         <div class="kanban-card-info">Полки навесные (6 шт)</div>
@@ -1057,7 +1557,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #4169e1;">Монтаж</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #4169e1, #1e90ff);">Монтаж</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Заказ №2024-144</div>
                         <div class="kanban-card-info">Кухня №2024-144</div>
@@ -1066,7 +1566,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #5cb85c;">Завершено</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #5cb85c, #27ae60);">Завершено</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Заказ №2024-143</div>
                         <div class="kanban-card-info">Гардеробная система</div>
@@ -1075,61 +1575,61 @@
                 </div>
             </div>
             
-            <!-- План-график производства в стиле Планфикс -->
-            <div class="card">
+            <!-- План-график производства -->
+            <div class="card interactive-element">
                 <div class="card-title">План-график загрузки исполнителей • Январь 2025</div>
                 <div class="gantt-chart">
-                    <div class="gantt-header" style="display: flex; background: #f7f8fa; padding: 12px; border: 1px solid #e1e4e8;">
-                        <div style="width: 250px; font-weight: 600;">Исполнитель / Заказ</div>
-                        <div style="flex: 1; display: flex;">
-                            <div style="flex: 1; text-align: center; border-left: 1px solid #e1e4e8;">Неделя 1</div>
-                            <div style="flex: 1; text-align: center; border-left: 1px solid #e1e4e8;">Неделя 2</div>
-                            <div style="flex: 1; text-align: center; border-left: 1px solid #e1e4e8;">Неделя 3</div>
-                            <div style="flex: 1; text-align: center; border-left: 1px solid #e1e4e8;">Неделя 4</div>
-                            <div style="flex: 0.5; text-align: center; border-left: 1px solid #e1e4e8;">Нед. 5</div>
+                    <div class="gantt-header" style="display: flex; background: linear-gradient(135deg, var(--planfix-blue), #5a9fd4); padding: 12px; border-radius: 10px 10px 0 0;">
+                        <div style="width: 250px; font-weight: 600; color: white;">Исполнитель / Заказ</div>
+                        <div style="flex: 1; display: flex; color: white;">
+                            <div style="flex: 1; text-align: center; border-left: 1px solid rgba(255,255,255,0.3);">Неделя 1</div>
+                            <div style="flex: 1; text-align: center; border-left: 1px solid rgba(255,255,255,0.3);">Неделя 2</div>
+                            <div style="flex: 1; text-align: center; border-left: 1px solid rgba(255,255,255,0.3);">Неделя 3</div>
+                            <div style="flex: 1; text-align: center; border-left: 1px solid rgba(255,255,255,0.3);">Неделя 4</div>
+                            <div style="flex: 0.5; text-align: center; border-left: 1px solid rgba(255,255,255,0.3);">Нед. 5</div>
                         </div>
                     </div>
                     
                     <div class="gantt-row" style="display: flex; border: 1px solid #e1e4e8; border-top: none;">
                         <div class="gantt-label" style="width: 250px; padding: 10px; background: #fff;">Петров А.В. (столяр)</div>
-                        <div class="gantt-timeline" style="flex: 1; position: relative; height: 50px; background: #fafbfc;">
-                            <div class="gantt-bar" style="background: #8b6f47; left: 2%; width: 12%;">Заказ №150</div>
-                            <div class="gantt-bar" style="background: #8b6f47; left: 25%; width: 15%;">Заказ №151</div>
-                            <div class="gantt-bar" style="background: #a0826d; left: 50%; width: 18%;">Заказ №152</div>
-                            <div class="gantt-bar" style="background: #a0826d; left: 75%; width: 22%;">Заказ №153</div>
+                        <div class="gantt-timeline" style="flex: 1; position: relative; height: 50px; background: linear-gradient(135deg, #fafbfc, #f7f8fa);">
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #8b6f47, #a0826d); left: 2%; width: 12%;">Заказ №150</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #8b6f47, #a0826d); left: 25%; width: 15%;">Заказ №151</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #a0826d, #cd853f); left: 50%; width: 18%;">Заказ №152</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #a0826d, #cd853f); left: 75%; width: 22%;">Заказ №153</div>
                         </div>
                     </div>
                     
                     <div class="gantt-row" style="display: flex; border: 1px solid #e1e4e8; border-top: none; background: #f7f8fa;">
                         <div class="gantt-label" style="width: 250px; padding: 10px; background: #fff;">Козлов Д.П. (маляр)</div>
                         <div class="gantt-timeline" style="flex: 1; position: relative; height: 50px;">
-                            <div class="gantt-bar" style="background: #9370db; left: 5%; width: 10%;">№146</div>
-                            <div class="gantt-bar" style="background: #9370db; left: 23%; width: 12%;">№147</div>
-                            <div class="gantt-bar" style="background: #9370db; left: 42%; width: 11%;">№148</div>
-                            <div class="gantt-bar" style="background: #a690db; left: 60%; width: 9%;">№149</div>
-                            <div class="gantt-bar" style="background: #a690db; left: 78%; width: 15%;">№150</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #9370db, #8a2be2); left: 5%; width: 10%;">№146</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #9370db, #8a2be2); left: 23%; width: 12%;">№147</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #9370db, #ba55d3); left: 42%; width: 11%;">№148</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #a690db, #ba55d3); left: 60%; width: 9%;">№149</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #a690db, #dda0dd); left: 78%; width: 15%;">№150</div>
                         </div>
                     </div>
                     
                     <div class="gantt-row" style="display: flex; border: 1px solid #e1e4e8; border-top: none;">
                         <div class="gantt-label" style="width: 250px; padding: 10px; background: #fff;">Николаев В.В. (монтаж)</div>
-                        <div class="gantt-timeline" style="flex: 1; position: relative; height: 50px; background: #fafbfc;">
-                            <div class="gantt-bar" style="background: #4169e1; left: 11%; width: 2%; font-size: 10px;">4</div>
-                            <div class="gantt-bar" style="background: #4169e1; left: 35%; width: 2%; font-size: 10px;">11</div>
-                            <div class="gantt-bar" style="background: #4169e1; left: 48%; width: 2%; font-size: 10px;">15</div>
-                            <div class="gantt-bar" style="background: #4169e1; left: 71%; width: 2%; font-size: 10px;">22</div>
-                            <div class="gantt-bar" style="background: #4169e1; left: 90%; width: 2%; font-size: 10px;">28</div>
+                        <div class="gantt-timeline" style="flex: 1; position: relative; height: 50px; background: linear-gradient(135deg, #fafbfc, #f7f8fa);">
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #4169e1, #1e90ff); left: 11%; width: 2%; font-size: 10px;">4</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #4169e1, #1e90ff); left: 35%; width: 2%; font-size: 10px;">11</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #4169e1, #1e90ff); left: 48%; width: 2%; font-size: 10px;">15</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #4169e1, #4682b4); left: 71%; width: 2%; font-size: 10px;">22</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #4169e1, #4682b4); left: 90%; width: 2%; font-size: 10px;">28</div>
                         </div>
                     </div>
                     
                     <div class="gantt-row" style="display: flex; border: 1px solid #e1e4e8; border-top: none; background: #f7f8fa;">
                         <div class="gantt-label" style="width: 250px; padding: 10px; background: #fff;">Федоров П.С. (монтаж)</div>
                         <div class="gantt-timeline" style="flex: 1; position: relative; height: 50px;">
-                            <div class="gantt-bar" style="background: #4169e1; left: 19%; width: 2%; font-size: 10px;">7</div>
-                            <div class="gantt-bar" style="background: #4169e1; left: 42%; width: 2%; font-size: 10px;">13</div>
-                            <div class="gantt-bar" style="background: #4169e1; left: 61%; width: 2%; font-size: 10px;">19</div>
-                            <div class="gantt-bar" style="background: #4169e1; left: 77%; width: 2%; font-size: 10px;">24</div>
-                            <div class="gantt-bar" style="background: #4169e1; left: 96%; width: 2%; font-size: 10px;">30</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #4169e1, #1e90ff); left: 19%; width: 2%; font-size: 10px;">7</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #4169e1, #1e90ff); left: 42%; width: 2%; font-size: 10px;">13</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #4169e1, #4682b4); left: 61%; width: 2%; font-size: 10px;">19</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #4169e1, #4682b4); left: 77%; width: 2%; font-size: 10px;">24</div>
+                            <div class="gantt-bar" style="background: linear-gradient(135deg, #4169e1, #6495ed); left: 96%; width: 2%; font-size: 10px;">30</div>
                         </div>
                     </div>
                 </div>
@@ -1156,31 +1656,32 @@
             </div>
 
             <!-- Описание процесса изготовления образцов -->
-<div class="card">
-    <div class="card-title">О процессе изготовления образцов</div>
-    <div style="color: #2c3e50; line-height: 1.8; font-size: 14px;">
-        <div style="margin-bottom: 15px;">
-            Изготовление образцов это <strong>параллельный независимый процесс</strong>.
-        </div>
-        <ol style="margin-left: 20px;">
-            <li style="margin-bottom: 10px;">
-                <strong>Цель</strong>: Создаются небольшие деревянные плашки – <strong>выкрасы и образцы</strong> – для согласования типа отделки будущих изделий.
-            </li>
-            <li style="margin-bottom: 10px;">
-                <strong>Постановка задачи</strong>: Менеджер ставит задачу на производство.
-            </li>
-            <li style="margin-bottom: 10px;">
-                <strong>Изготовление</strong>: Производство принимает задачу и изготавливает образцы либо собственными силами, либо силами подрядчика.
-            </li>
-            <li style="margin-bottom: 10px;">
-                <strong>Хранение рецептов</strong>: Система позволяет хранить <strong>рецепты всех произведённых выкрасов и образцов</strong> в специальной таблице.
-            </li>
-        </ol>
-    </div>
-</div>
+            <div class="card interactive-element">
+                <div class="card-title">О процессе изготовления образцов</div>
+                <div style="color: #2c3e50; line-height: 1.8; font-size: 15px;">
+                    <div style="margin-bottom: 15px;">
+                        Изготовление образцов это <strong>параллельный независимый процесс</strong>.
+                    </div>
+                    <ol style="margin-left: 20px;">
+                        <li style="margin-bottom: 10px;">
+                            <strong>Цель</strong>: Создаются небольшие деревянные плашки — <strong>выкрасы и образцы</strong> — для согласования типа отделки будущих изделий.
+                        </li>
+                        <li style="margin-bottom: 10px;">
+                            <strong>Постановка задачи</strong>: Менеджер ставит задачу на производство.
+                        </li>
+                        <li style="margin-bottom: 10px;">
+                            <strong>Изготовление</strong>: Производство принимает задачу и изготавливает образцы либо собственными силами, либо силами подрядчика.
+                        </li>
+                        <li style="margin-bottom: 10px;">
+                            <strong>Хранение рецептов</strong>: Система позволяет хранить <strong>рецепты всех произведённых выкрасов и образцов</strong> в специальной таблице.
+                        </li>
+                    </ol>
+                </div>
+            </div>
+            
             <div class="kanban-board">
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #2ecc71;">Запрошено</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #2ecc71, #27ae60);">Запрошено</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">RAL 7035</div>
                         <div class="kanban-card-info">Заказчик: Петров А.А.</div>
@@ -1194,7 +1695,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #5cb85c;">В работе</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #5cb85c, #2ecc71);">В работе</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Дуб беленый</div>
                         <div class="kanban-card-info">Заказчик: ООО "Стиль"</div>
@@ -1203,7 +1704,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #3498db;">На утверждении</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #3498db, #2980b9);">На утверждении</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Серый графит</div>
                         <div class="kanban-card-info">Заказчик: Иванова А.А.</div>
@@ -1212,7 +1713,7 @@
                 </div>
                 
                 <div class="kanban-column">
-                    <div class="kanban-header" style="background: #27ae60;">Утверждено</div>
+                    <div class="kanban-header" style="background: linear-gradient(135deg, #27ae60, #2ecc71);">Утверждено</div>
                     <div class="kanban-card">
                         <div class="kanban-card-title">Орех итальянский</div>
                         <div class="kanban-card-info">Рецепт №234</div>
@@ -1222,7 +1723,7 @@
             </div>
             
             <!-- Таблица рецептов -->
-            <div class="card">
+            <div class="card interactive-element">
                 <div class="card-title">База рецептов покраски</div>
                 <div style="margin-bottom: 15px;">
                     <input type="text" class="form-input" placeholder="Поиск по названию, коду или компонентам..." onkeyup="filterRecipes(this.value)">
@@ -1304,74 +1805,74 @@
             </div>
 
             <!-- Описание финансовой системы -->
-<div class="card">
-    <div class="card-title">О финансовой отчетности</div>
-    <div style="color: #2c3e50; line-height: 1.8; font-size: 14px;">
-        <ol style="margin-left: 20px;">
-            <li style="margin-bottom: 15px;">
-                <strong>Отчетность</strong>: Система умеет визуализировать и составлять отчёты по <strong>движению денежных средств</strong>, по проектам в рамках оплат, очередности оплат и по задолженностям (как по одному, так и по всем проектам).
-            </li>
-            <li style="margin-bottom: 15px;">
-                <strong>Автоматические задачи</strong>: В момент создания ячейки хранения информации по договору система автоматически создает задачи, позволяющие <strong>формировать план выручки</strong> и <strong>фиксировать фактическое поступление денежных средств</strong>.
-            </li>
-            <li style="margin-bottom: 15px;">
-                <strong>Планирование и контроль</strong>: На основе стандартных заготовок менеджер и руководитель отдела продаж могут <strong>планировать выручку, контролировать дебиторскую задолженность</strong> и отслеживать выполнение плана продаж.
-            </li>
-            <li style="margin-bottom: 15px;">
-                <strong>Контроль оплат</strong>: В системе есть заготовки для контроля оплат по договору менеджером, а также для контроля менеджера его руководителем и директором организации.
-            </li>
-            <li style="margin-bottom: 15px;">
-                <strong>Отчет выполнения плана</strong>: При заключении договора менеджером формируется план-график поступления денежных средств, а по факту их поступления формируется <strong>отчёт выполнения плана продаж</strong>, где видна результативность менеджеров и общая картина выполнения плана организации.
-            </li>
-        </ol>
-    </div>
-</div>
+            <div class="card interactive-element">
+                <div class="card-title">О финансовой отчетности</div>
+                <div style="color: #2c3e50; line-height: 1.8; font-size: 15px;">
+                    <ol style="margin-left: 20px;">
+                        <li style="margin-bottom: 15px;">
+                            <strong>Отчетность</strong>: Система умеет визуализировать и составлять отчёты по <strong>движению денежных средств</strong>, по проектам в рамках оплат, очередности оплат и по задолженностям (как по одному, так и по всем проектам).
+                        </li>
+                        <li style="margin-bottom: 15px;">
+                            <strong>Автоматические задачи</strong>: В момент создания ячейки хранения информации по договору система автоматически создает задачи, позволяющие <strong>формировать план выручки</strong> и <strong>фиксировать фактическое поступление денежных средств</strong>.
+                        </li>
+                        <li style="margin-bottom: 15px;">
+                            <strong>Планирование и контроль</strong>: На основе стандартных заготовок менеджер и руководитель отдела продаж могут <strong>планировать выручку, контролировать дебиторскую задолженность</strong> и отслеживать выполнение плана продаж.
+                        </li>
+                        <li style="margin-bottom: 15px;">
+                            <strong>Контроль оплат</strong>: В системе есть заготовки для контроля оплат по договору менеджером, а также для контроля менеджера его руководителем и директором организации.
+                        </li>
+                        <li style="margin-bottom: 15px;">
+                            <strong>Отчет выполнения плана</strong>: При заключении договора менеджером формируется план-график по поступлению денежных средств, а по факту их поступления формируется <strong>отчёт выполнения плана продаж</strong>, где видна результативность менеджеров и общая картина выполнения плана организации.
+                        </li>
+                    </ol>
+                </div>
+            </div>
             
             <!-- Выполнение плана по менеджерам -->
-            <div class="card">
+            <div class="card interactive-element">
                 <div class="card-title">Выполнение плана продаж по менеджерам</div>
                 <div style="margin: 20px 0;">
                     <div style="margin-bottom: 20px;">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                            <strong>Менеджер 1</strong>
+                            <strong style="font-size: 16px;">Менеджер 1</strong>
                             <span style="color: var(--text-secondary); font-size: 14px;">2 760 000 ₽ / 3 000 000 ₽</span>
                         </div>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 92%; background: #27ae60;">92%</div>
+                            <div class="progress-fill" style="width: 92%; background: linear-gradient(135deg, #27ae60, #2ecc71);">92%</div>
                         </div>
                     </div>
                     <div style="margin-bottom: 20px;">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                            <strong>Менеджер 2</strong>
+                            <strong style="font-size: 16px;">Менеджер 2</strong>
                             <span style="color: var(--text-secondary); font-size: 14px;">2 340 000 ₽ / 3 000 000 ₽</span>
                         </div>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 78%; background: #f39c12;">78%</div>
+                            <div class="progress-fill" style="width: 78%; background: linear-gradient(135deg, #f39c12, #f0ad4e);">78%</div>
                         </div>
                     </div>
                     <div style="margin-bottom: 20px;">
                         <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                            <strong>Менеджер 3</strong>
+                            <strong style="font-size: 16px;">Менеджер 3</strong>
                             <span style="color: var(--text-secondary); font-size: 14px;">1 950 000 ₽ / 3 000 000 ₽</span>
                         </div>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 65%; background: #e74c3c;">65%</div>
+                            <div class="progress-fill" style="width: 65%; background: linear-gradient(135deg, #e74c3c, #c0392b);">65%</div>
                         </div>
                     </div>
                     <div>
                         <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                            <strong>Менеджер 4</strong>
+                            <strong style="font-size: 16px;">Менеджер 4</strong>
                             <span style="color: var(--text-secondary); font-size: 14px;">2 450 000 ₽ / 3 000 000 ₽</span>
                         </div>
                         <div class="progress-bar">
-                            <div class="progress-fill" style="width: 82%; background: #3498db;">82%</div>
+                            <div class="progress-fill" style="width: 82%; background: linear-gradient(135deg, #3498db, #2980b9);">82%</div>
                         </div>
                     </div>
                 </div>
             </div>
             
             <!-- Движение денежных средств -->
-            <div class="card">
+            <div class="card interactive-element">
                 <div class="card-title">Движение денежных средств по проектам</div>
                 <table class="table">
                     <thead>
@@ -1388,15 +1889,15 @@
                         <tr>
                             <td><strong>№2024-156</strong></td>
                             <td>850 000 ₽</td>
-                            <td style="color: #27ae60;">✔ 255 000 ₽</td>
-                            <td style="color: #27ae60;">✔ 340 000 ₽</td>
+                            <td style="color: #27ae60;">✓ 255 000 ₽</td>
+                            <td style="color: #27ae60;">✓ 340 000 ₽</td>
                             <td>—</td>
                             <td><strong>595 000 ₽</strong></td>
                         </tr>
                         <tr>
                             <td><strong>№2024-155</strong></td>
                             <td>620 000 ₽</td>
-                            <td style="color: #27ae60;">✔ 186 000 ₽</td>
+                            <td style="color: #27ae60;">✓ 186 000 ₽</td>
                             <td>—</td>
                             <td>—</td>
                             <td><strong>186 000 ₽</strong></td>
@@ -1404,157 +1905,155 @@
                         <tr>
                             <td><strong>№2024-154</strong></td>
                             <td>1 200 000 ₽</td>
-                            <td style="color: #27ae60;">✔ 360 000 ₽</td>
-                            <td style="color: #27ae60;">✔ 480 000 ₽</td>
-                            <td style="color: #27ae60;">✔ 360 000 ₽</td>
+                            <td style="color: #27ae60;">✓ 360 000 ₽</td>
+                            <td style="color: #27ae60;">✓ 480 000 ₽</td>
+                            <td style="color: #27ae60;">✓ 360 000 ₽</td>
                             <td><strong>1 200 000 ₽</strong></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
+        
         <!-- Страница: Единая система хранения информации -->
-<div id="storage" class="page">
-    <h1 class="page-title">Единая система хранения информации</h1>
+        <div id="storage" class="page">
+            <h1 class="page-title">Единая система хранения информации</h1>
 
-    <!-- Блок преимуществ -->
-    <div class="benefits-block">
-        <div class="benefits-shape"></div>
-        <div class="benefits-content">
-            <h3>Преимущества единой системы хранения</h3>
-            <ul>
-                <li>Все документы по проекту в одном месте</li>
-                <li>Автоматическое создание структуры папок</li>
-                <li>Быстрый поиск нужной информации</li>
-                <li>Контроль версий документов</li>
-                <li>Разграничение прав доступа</li>
-            </ul>
-        </div>
-    </div>
-    
-    <!-- Описание системы -->
-<div class="card">
-    <div class="card-title">О системе хранения</div>
-    <div style="color: #2c3e50; line-height: 1.8; font-size: 14px;">
-        <p style="margin-bottom: 20px;">
-            Единая система хранения информации является ключевым элементом для организации и управления данными в рамках производственных процессов.
-        </p>
-        
-        <h3 style="color: #9b59b6; margin-bottom: 15px; font-size: 16px;">
-            Как устроена и когда создается:
-        </h3>
-        <ul style="margin-left: 20px; margin-bottom: 25px;">
-            <li style="margin-bottom: 12px;">
-                <strong>Создание после сделки</strong>: Единая система хранения информации формируется, как только сделка состоялась.
-            </li>
-            <li style="margin-bottom: 12px;">
-                <strong>Создание нового заказчика и проекта</strong>: В этом разделе системы создается новый заказчик, который также рассматривается как проект, а также соответствующий договор или несколько договоров, в зависимости от контекста заказа.
-            </li>
-            <li style="margin-bottom: 12px;">
-                <strong>Автоматическая структура хранения</strong>: Система <strong>автоматически создает структуру хранения информации</strong> с определенными папками и разделами. Эти папки и разделы регламентируют, как должна храниться та или иная информация по проекту.
-            </li>
-        </ul>
-        
-        <h3 style="color: #9b59b6; margin-bottom: 15px; font-size: 16px;">
-            Что хранится в системе:
-        </h3>
-        <p style="margin-bottom: 15px;">
-            В рамках этой структуры хранения по каждому проекту система аккумулирует и упорядочивает следующую информацию:
-        </p>
-        <ul style="margin-left: 20px;">
-            <li style="margin-bottom: 10px;"><strong>Первичные документы</strong></li>
-            <li style="margin-bottom: 10px;"><strong>Закрывающие документы</strong></li>
-            <li style="margin-bottom: 10px;"><strong>Чертежи</strong></li>
-            <li style="margin-bottom: 10px;"><strong>Переписка между участниками проекта внутри системы</strong></li>
-            <li style="margin-bottom: 10px;"><strong>Информация о выручке</strong></li>
-        </ul>
+            <!-- Блок преимуществ -->
+            <div class="benefits-block">
+                <div class="benefits-shape"></div>
+                <div class="benefits-content">
+                    <h3>Преимущества единой системы хранения</h3>
+                    <ul>
+                        <li>Все документы по проекту в одном месте</li>
+                        <li>Автоматическое создание структуры папок</li>
+                        <li>Быстрый поиск нужной информации</li>
+                        <li>Контроль версий документов</li>
+                        <li>Разграничение прав доступа</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Описание системы -->
+            <div class="card interactive-element">
+                <div class="card-title">О системе хранения</div>
+                <div style="color: #2c3e50; line-height: 1.8; font-size: 15px;">
+                    <p style="margin-bottom: 20px;">
+                        Единая система хранения информации является ключевым элементом для организации и управления данными в рамках производственных процессов.
+                    </p>
+                    
+                    <h3 style="color: #9b59b6; margin-bottom: 15px; font-size: 16px;">
+                        Как устроена и когда создается:
+                    </h3>
+                    <ul style="margin-left: 20px; margin-bottom: 25px;">
+                        <li style="margin-bottom: 12px;">
+                            <strong>Создание после сделки</strong>: Единая система хранения информации формируется, как только сделка состоялась.
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <strong>Создание нового заказчика и проекта</strong>: В этом разделе системы создается новый заказчик, который также рассматривается как проект, а также соответствующий договор или несколько договоров, в зависимости от контекста заказа.
+                        </li>
+                        <li style="margin-bottom: 12px;">
+                            <strong>Автоматическая структура хранения</strong>: Система <strong>автоматически создает структуру хранения информации</strong> с определенными папками и разделами. Эти папки и разделы регламентируют, как должна храниться та или иная информация по проекту.
+                        </li>
+                    </ul>
+                    
+                    <h3 style="color: #9b59b6; margin-bottom: 15px; font-size: 16px;">
+                        Что хранится в системе:
+                    </h3>
+                    <p style="margin-bottom: 15px;">
+                        В рамках этой структуры хранения по каждому проекту система аккумулирует и упорядочивает следующую информацию:
+                    </p>
+                    <ul style="margin-left: 20px;">
+                        <li style="margin-bottom: 10px;"><strong>Первичные документы</strong></li>
+                        <li style="margin-bottom: 10px;"><strong>Закрывающие документы</strong></li>
+                        <li style="margin-bottom: 10px;"><strong>Чертежи</strong></li>
+                        <li style="margin-bottom: 10px;"><strong>Переписка между участниками проекта внутри системы</strong></li>
+                        <li style="margin-bottom: 10px;"><strong>Информация о выручке</strong></li>
+                    </ul>
 
-        <h3 style="color: #9b59b6; margin-bottom: 15px; font-size: 16px;">
-            По каждому изделию внутри договора система также хранит:
-        </h3>
-        <ul style="margin-left: 20px;">
-            <li style="margin-bottom: 10px;"><strong>Техническое задание на изделие</strong> – детальное описание требований и характеристик</li>
-            <li style="margin-bottom: 10px;"><strong>Чертежи на согласование</strong> – версии для утверждения заказчиком</li>
-            <li style="margin-bottom: 10px;"><strong>Рабочая документация в цех</strong> – производственные чертежи и инструкции</li>
-            <li style="margin-bottom: 10px;"><strong>Задачи по проектированию и производству</strong> – из которых автоматически формируются план-графики работ</li>
-        </ul>
-    </div>
-</div>
-    
-    <!-- Визуальная схема структуры папок -->
-<div class="card">
-    <div class="card-title">Структура хранения по проекту</div>
-    <div style="background: #f7f8fa; padding: 25px; border-radius: 6px;">
-        <div style="font-family: monospace; color: #2c3e50; line-height: 1.8;">
-            <div>📁 <strong>Проект №2024-156 - Белова Е.Е.</strong></div>
-            <div style="margin-left: 25px;">├── 📁 Договоры</div>
-            <div style="margin-left: 50px;">├── 📄 Договор №2024-156.pdf</div>
-            <div style="margin-left: 50px;">└── 📄 Дополнительное соглашение №1.pdf</div>
-            <div style="margin-left: 25px;">├── 📁 Первичные документы</div>
-            <div style="margin-left: 50px;">├── 📄 Счет на оплату.pdf</div>
-            <div style="margin-left: 50px;">└── 📄 Спецификация.xlsx</div>
-            <div style="margin-left: 25px;">├── 📁 Изделия</div>
-            <div style="margin-left: 50px;">├── 📁 Изделие 1 - Кухня</div>
-            <div style="margin-left: 75px;">├── 📄 Техническое задание</div>
-            <div style="margin-left: 75px;">├── 📋 Задача: Чертеж на согласование</div>
-            <div style="margin-left: 75px;">├── 📋 Задача: РД (рабочая документация)</div>
-            <div style="margin-left: 75px;">├── 📋 Задача: Столярка</div>
-            <div style="margin-left: 75px;">├── 📋 Задача: Шлифовка</div>
-            <div style="margin-left: 75px;">└── 📋 Задача: Малярка</div>
-            <div style="margin-left: 50px;">└── 📁 Изделие 2 - Шкаф-купе</div>
-            <div style="margin-left: 75px;">├── 📄 Техническое задание.pdf</div>
-            <div style="margin-left: 75px;">├── 📋 Задача: Чертеж на согласование</div>
-            <div style="margin-left: 75px;">├── 📋 Задача: РД (рабочая документация)</div>
-            <div style="margin-left: 75px;">├── 📋 Задача: Столярка</div>
-            <div style="margin-left: 75px;">├── 📋 Задача: Шлифовка</div>
-            <div style="margin-left: 75px;">└── 📋 Задача: Малярка</div>
-            <div style="margin-left: 25px;">├── 📁 Переписка</div>
-            <div style="margin-left: 50px;">├── 📄 Согласование дизайна.msg</div>
-            <div style="margin-left: 50px;">└── 📄 Изменения от заказчика.pdf</div>
-            <div style="margin-left: 25px;">├── 📁 Закрывающие документы</div>
-            <div style="margin-left: 50px;">├── 📄 Акт выполненных работ.pdf</div>
-            <div style="margin-left: 50px;">├── 📄 Накладная.pdf</div>
-            <div style="margin-left: 50px;">└── 📄 Счет-фактура.pdf</div>
-            <div style="margin-left: 25px;">└── 📁 Финансы</div>
-            <div style="margin-left: 50px;">├── 📄 Расчет себестоимости.xlsx</div>
-            <div style="margin-left: 50px;">└── 📄 Отчет по выручке.pdf</div>
+                    <h3 style="color: #9b59b6; margin-bottom: 15px; font-size: 16px;">
+                        По каждому изделию внутри договора система также хранит:
+                    </h3>
+                    <ul style="margin-left: 20px;">
+                        <li style="margin-bottom: 10px;"><strong>Техническое задание на изделие</strong> — детальное описание требований и характеристик</li>
+                        <li style="margin-bottom: 10px;"><strong>Чертежи на согласование</strong> — версии для утверждения заказчиком</li>
+                        <li style="margin-bottom: 10px;"><strong>Рабочая документация в цех</strong> — производственные чертежи и инструкции</li>
+                        <li style="margin-bottom: 10px;"><strong>Задачи по проектированию и производству</strong> — из которых автоматически формируются план-графики работ</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <!-- Визуальная схема структуры папок -->
+            <div class="card interactive-element">
+                <div class="card-title">Структура хранения по проекту</div>
+                <div style="background: linear-gradient(135deg, #f7f8fa, #ffffff); padding: 30px; border-radius: 10px;">
+                    <div style="font-family: monospace; color: #2c3e50; line-height: 2; font-size: 14px;">
+                        <div style="font-weight: 700;">📁 <strong>Проект №2024-156 - Белова Е.Е.</strong></div>
+                        <div style="margin-left: 30px;">├── 📁 Договоры</div>
+                        <div style="margin-left: 60px;">├── 📄 Договор №2024-156.pdf</div>
+                        <div style="margin-left: 60px;">└── 📄 Дополнительное соглашение №1.pdf</div>
+                        <div style="margin-left: 30px;">├── 📁 Первичные документы</div>
+                        <div style="margin-left: 60px;">├── 📄 Счет на оплату.pdf</div>
+                        <div style="margin-left: 60px;">└── 📄 Спецификация.xlsx</div>
+                        <div style="margin-left: 30px;">├── 📁 Изделия</div>
+                        <div style="margin-left: 60px;">├── 📁 Изделие 1 - Кухня</div>
+                        <div style="margin-left: 90px;">├── 📄 Техническое задание</div>
+                        <div style="margin-left: 90px;">├── 📋 Задача: Чертеж на согласование</div>
+                        <div style="margin-left: 90px;">├── 📋 Задача: РД (рабочая документация)</div>
+                        <div style="margin-left: 90px;">├── 📋 Задача: Столярка</div>
+                        <div style="margin-left: 90px;">├── 📋 Задача: Шлифовка</div>
+                        <div style="margin-left: 90px;">└── 📋 Задача: Малярка</div>
+                        <div style="margin-left: 60px;">└── 📁 Изделие 2 - Шкаф-купе</div>
+                        <div style="margin-left: 90px;">├── 📄 Техническое задание.pdf</div>
+                        <div style="margin-left: 90px;">├── 📋 Задача: Чертеж на согласование</div>
+                        <div style="margin-left: 90px;">├── 📋 Задача: РД (рабочая документация)</div>
+                        <div style="margin-left: 90px;">├── 📋 Задача: Столярка</div>
+                        <div style="margin-left: 90px;">├── 📋 Задача: Шлифовка</div>
+                        <div style="margin-left: 90px;">└── 📋 Задача: Малярка</div>
+                        <div style="margin-left: 30px;">├── 📁 Переписка</div>
+                        <div style="margin-left: 60px;">├── 📄 Согласование дизайна.msg</div>
+                        <div style="margin-left: 60px;">└── 📄 Изменения от заказчика.pdf</div>
+                        <div style="margin-left: 30px;">├── 📁 Закрывающие документы</div>
+                        <div style="margin-left: 60px;">├── 📄 Акт выполненных работ.pdf</div>
+                        <div style="margin-left: 60px;">├── 📄 Накладная.pdf</div>
+                        <div style="margin-left: 60px;">└── 📄 Счет-фактура.pdf</div>
+                        <div style="margin-left: 30px;">└── 📁 Финансы</div>
+                        <div style="margin-left: 60px;">├── 📄 Расчет себестоимости.xlsx</div>
+                        <div style="margin-left: 60px;">└── 📄 Отчет по выручке.pdf</div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-</div>
-    
-</div>
     </main>
-
-    
 
     <!-- Навигационные табы -->
     <nav class="tabs">
         <button class="tab active" onclick="switchTab('overview')" data-tab="overview">
-            <div class="tab-icon" style="background: linear-gradient(135deg, #9b59b6, #3498db);"></div>
+            <div class="tab-icon" style="background: linear-gradient(135deg, #667eea, #764ba2);"></div>
             <span class="tab-text">Обзор</span>
         </button>
         <button class="tab" onclick="switchTab('storage')" data-tab="storage">
-    <div class="tab-icon" style="background: #9b59b6;"></div>
-    <span class="tab-text">Хранение</span>
-</button>
+            <div class="tab-icon" style="background: linear-gradient(135deg, #a8edea, #fed6e3);"></div>
+            <span class="tab-text">Хранение</span>
+        </button>
         <button class="tab" onclick="switchTab('sales')" data-tab="sales">
-            <div class="tab-icon" style="background: #f39c12;"></div>
+            <div class="tab-icon" style="background: linear-gradient(135deg, #f093fb, #f5576c);"></div>
             <span class="tab-text">Продажи</span>
         </button>
         <button class="tab" onclick="switchTab('design')" data-tab="design">
-            <div class="tab-icon" style="background: #27ae60;"></div>
+            <div class="tab-icon" style="background: linear-gradient(135deg, #4facfe, #00f2fe);"></div>
             <span class="tab-text">Проектирование</span>
         </button>
         <button class="tab" onclick="switchTab('production')" data-tab="production">
-            <div class="tab-icon" style="background: #3498db;"></div>
+            <div class="tab-icon" style="background: linear-gradient(135deg, #43e97b, #38f9d7);"></div>
             <span class="tab-text">Производство</span>
         </button>
         <button class="tab" onclick="switchTab('samples')" data-tab="samples">
-            <div class="tab-icon" style="background: #2ecc71;"></div>
+            <div class="tab-icon" style="background: linear-gradient(135deg, #fa709a, #fee140);"></div>
             <span class="tab-text">Образцы</span>
         </button>
         <button class="tab" onclick="switchTab('finance')" data-tab="finance">
-            <div class="tab-icon" style="background: #2980b9;"></div>
+            <div class="tab-icon" style="background: linear-gradient(135deg, #30cfd0, #330867);"></div>
             <span class="tab-text">Финансы</span>
         </button>
     </nav>
@@ -1594,160 +2093,194 @@
             if (savedTab && savedTab !== 'overview') {
                 switchTab(savedTab);
             }
+            
+            // Анимация элементов при скролле
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+            
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, observerOptions);
+            
+            // Добавляем анимацию для карточек
+            document.querySelectorAll('.card, .kanban-board, .info-block').forEach(el => {
+                el.classList.add('animate-on-scroll');
+                observer.observe(el);
+            });
         });
 
         // Демонстрация процесса кухни
         function showKitchenDemo() {
             // Создаем модальное окно
             const modal = document.createElement('div');
+            modal.id = 'modal';
             modal.style.cssText = `
                 position: fixed;
                 top: 0;
                 left: 0;
                 right: 0;
                 bottom: 0;
-                background: rgba(0,0,0,0.5);
+                background: rgba(0,0,0,0.7);
                 display: flex;
                 align-items: center;
                 justify-content: center;
                 z-index: 1000;
                 padding: 20px;
+                animation: fadeIn 0.3s ease;
             `;
             
             const modalContent = document.createElement('div');
+            modalContent.className = 'modal-content';
             modalContent.style.cssText = `
-                background: white;
-                border-radius: 8px;
+                background: linear-gradient(135deg, #ffffff, #f8f9fa);
+                border-radius: 16px;
                 max-width: 900px;
                 width: 100%;
                 max-height: 90vh;
                 overflow-y: auto;
                 padding: 40px;
-                box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+                box-shadow: 0 20px 60px rgba(0,0,0,0.3);
                 position: relative;
+                animation: slideUp 0.4s ease;
             `;
             
             modalContent.innerHTML = `
-                <button onclick="this.closest('div').parentElement.remove()" style="
+                <button onclick="this.closest('#modal').remove()" style="
                     position: absolute;
                     top: 20px;
                     right: 20px;
-                    background: none;
+                    background: linear-gradient(135deg, #e74c3c, #c0392b);
                     border: none;
-                    font-size: 24px;
+                    width: 36px;
+                    height: 36px;
+                    border-radius: 50%;
+                    font-size: 20px;
                     cursor: pointer;
-                    color: #999;
-                ">✕</button>
+                    color: white;
+                    transition: all 0.3s ease;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                " onmouseover="this.style.transform='scale(1.1) rotate(90deg)'" onmouseout="this.style.transform='scale(1) rotate(0)'">✕</button>
                 
-                <h2 style="color: #2c3e50; margin-bottom: 25px; font-size: 24px;">
+                <h2 style="color: #2c3e50; margin-bottom: 30px; font-size: 28px; background: linear-gradient(135deg, #2c3e50, #4a90e2); -webkit-background-clip: text; -webkit-text-fill-color: transparent;">
                     Движение заказа на примере кухни: полный цикл в системе
                 </h2>
                 
                 <div style="color: #2c3e50; line-height: 1.8; font-size: 15px;">
-                    <div style="margin-bottom: 30px;">
-                        <h3 style="color: #f39c12; margin-bottom: 15px; font-size: 18px;">
-                            1. Продажи (Канбан-доска "Обработка заявок")
+                    <div style="margin-bottom: 35px;">
+                        <h3 style="color: #f39c12; margin-bottom: 15px; font-size: 20px; display: flex; align-items: center;">
+                            <span style="background: linear-gradient(135deg, #f39c12, #f5576c); width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-right: 12px;">1</span>
+                            Продажи (Канбан-доска "Обработка заявок")
                         </h3>
-                        <ul style="list-style: none; padding-left: 0;">
-                            <li style="margin-bottom: 10px;">
+                        <ul style="list-style: none; padding-left: 52px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(243,156,18,0.05), rgba(243,156,18,0.1)); border-radius: 8px; border-left: 3px solid #f39c12;">
                                 <strong>Заявка:</strong> Заказчик через мессенджер или почту отправляет запрос на изготовление кухни с фотографиями. Система автоматически создает задачу на канбан-доске в статусе "Новая заявка".
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(243,156,18,0.05), rgba(243,156,18,0.1)); border-radius: 8px; border-left: 3px solid #f39c12;">
                                 <strong>Обработка менеджером:</strong> Менеджер принимает заявку в работу, создает контакт заказчика в системе, формирует коммерческое предложение и отправляет его через интеграцию с мессенджер или почту.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(243,156,18,0.05), rgba(243,156,18,0.1)); border-radius: 8px; border-left: 3px solid #f39c12;">
                                 <strong>Договор:</strong> После согласования условий менеджер создает в системе проект с договором, используя шаблоны документов. Система автоматически создает систему попок и шаблонов задач для хранения информации по договору.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(243,156,18,0.05), rgba(243,156,18,0.1)); border-radius: 8px; border-left: 3px solid #f39c12;">
                                 <strong>Создание заказа:</strong> После получения аванса менеджер добавляет карточки изделий в проект. Все данные связываются: заказчик → проект → договор → изделие.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(243,156,18,0.05), rgba(243,156,18,0.1)); border-radius: 8px; border-left: 3px solid #f39c12;">
                                 <strong>Финансовые задачи:</strong> Система автоматически создает шаблоны задачи по контролю платежей: аванс 30%, промежуточный платеж 40%, финальный 30%.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(243,156,18,0.05), rgba(243,156,18,0.1)); border-radius: 8px; border-left: 3px solid #f39c12;">
                                 <strong>Контроль:</strong> Автоматически формируется шаблон план-графика по поступлению средств.
                             </li>
                         </ul>
                     </div>
                     
-                    <div style="margin-bottom: 30px;">
-                        <h3 style="color: #27ae60; margin-bottom: 15px; font-size: 18px;">
-                            2. Проектирование (Канбан-доска "Проектирование")
+                    <div style="margin-bottom: 35px;">
+                        <h3 style="color: #27ae60; margin-bottom: 15px; font-size: 20px; display: flex; align-items: center;">
+                            <span style="background: linear-gradient(135deg, #27ae60, #2ecc71); width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-right: 12px;">2</span>
+                            Проектирование (Канбан-доска "Проектирование")
                         </h3>
-                        <ul style="list-style: none; padding-left: 0;">
-                            <li style="margin-bottom: 10px;">
+                        <ul style="list-style: none; padding-left: 52px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(39,174,96,0.05), rgba(39,174,96,0.1)); border-radius: 8px; border-left: 3px solid #27ae60;">
                                 <strong>Начало процесса:</strong> После создания карточек изделий создаются задачи по проектированию. Эти задачи автоматически переходят на доску проектирования через настроенные сценарии.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(39,174,96,0.05), rgba(39,174,96,0.1)); border-radius: 8px; border-left: 3px solid #27ae60;">
                                 <strong>Назначение исполнителей:</strong> Главный конструктор через систему назначает конструктора, устанавливает сроки. Задача появляется в личном планировщике исполнителя.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(39,174,96,0.05), rgba(39,174,96,0.1)); border-radius: 8px; border-left: 3px solid #27ae60;">
                                 <strong>План-график:</strong> В разделе "План-график проектирования" отображается загрузка всех конструкторов в виде диаграммы Ганта. Видны пересечения и конфликты в расписании.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(39,174,96,0.05), rgba(39,174,96,0.1)); border-radius: 8px; border-left: 3px solid #27ae60;">
                                 <strong>Рабочий процесс:</strong> Конструктор работает с задачей, прикрепляет чертежи и спецификации прямо в карточку изделия. Все версии файлов сохраняются.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(39,174,96,0.05), rgba(39,174,96,0.1)); border-radius: 8px; border-left: 3px solid #27ae60;">
                                 <strong>Проверка и согласование:</strong> Главный конструктор проверяет чертежи, менеджер согласовывает с заказчиком. После утверждения и разработки РД, менеджер переходит карточку изделия в производство.
                             </li>
                         </ul>
                     </div>
                     
-                    <div style="margin-bottom: 30px;">
-                        <h3 style="color: #3498db; margin-bottom: 15px; font-size: 18px;">
-                            3. Производство и Монтаж (Канбан-доска "Производство")
+                    <div style="margin-bottom: 35px;">
+                        <h3 style="color: #3498db; margin-bottom: 15px; font-size: 20px; display: flex; align-items: center;">
+                            <span style="background: linear-gradient(135deg, #3498db, #2980b9); width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-right: 12px;">3</span>
+                            Производство и Монтаж (Канбан-доска "Производство")
                         </h3>
-                        <ul style="list-style: none; padding-left: 0;">
-                            <li style="margin-bottom: 10px;">
+                        <ul style="list-style: none; padding-left: 52px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(52,152,219,0.05), rgba(52,152,219,0.1)); border-radius: 8px; border-left: 3px solid #3498db;">
                                 <strong>Принятие в работу:</strong> Начальник производства получает уведомление о новой задаче, проверяет комплектность документации через чек-лист, подтверждает готовность к производству.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(52,152,219,0.05), rgba(52,152,219,0.1)); border-radius: 8px; border-left: 3px solid #3498db;">
                                 <strong>Назначение на участки:</strong> Через систему назначаются исполнители на каждый этап: столярка, шлифовка, покраска.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(52,152,219,0.05), rgba(52,152,219,0.1)); border-radius: 8px; border-left: 3px solid #3498db;">
                                 <strong>График производства:</strong> План-график производства показывает загрузку цехов и участков. Видна последовательность операций и критический путь проекта.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(52,152,219,0.05), rgba(52,152,219,0.1)); border-radius: 8px; border-left: 3px solid #3498db;">
                                 <strong>Движение по статусам:</strong> Изделие проходит статусы: "Столярный цех" → "Шлифовка" → "Покрасочный цех" → "Упаковка" → "Склад". При смене статуса отправляются уведомления.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(52,152,219,0.05), rgba(52,152,219,0.1)); border-radius: 8px; border-left: 3px solid #3498db;">
                                 <strong>Оповещения:</strong> Система напоминает: "Подготовьте материалы", "Изделие готово к отгрузке", "Запланирован монтаж".
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(52,152,219,0.05), rgba(52,152,219,0.1)); border-radius: 8px; border-left: 3px solid #3498db;">
                                 <strong>Монтаж:</strong> Создается задача монтажной бригаде с адресом и временем. После монтажа прикрепляются фото и акт выполненных работ.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(52,152,219,0.05), rgba(52,152,219,0.1)); border-radius: 8px; border-left: 3px solid #3498db;">
                                 <strong>Завершение:</strong> После успешного монтажа менеджер получает уведомление, подписывает закрывающие документы, проект переводится в архив.
                             </li>
                         </ul>
                     </div>
                     
-                    <div style="margin-bottom: 20px;">
-                        <h3 style="color: #e74c3c; margin-bottom: 15px; font-size: 18px;">
-                            4. Рекламации (при необходимости)
+                    <div style="margin-bottom: 30px;">
+                        <h3 style="color: #e74c3c; margin-bottom: 15px; font-size: 20px; display: flex; align-items: center;">
+                            <span style="background: linear-gradient(135deg, #e74c3c, #c0392b); width: 40px; height: 40px; border-radius: 50%; display: inline-flex; align-items: center; justify-content: center; color: white; font-weight: bold; margin-right: 12px;">4</span>
+                            Рекламации (при необходимости)
                         </h3>
-                        <ul style="list-style: none; padding-left: 0;">
-                            <li style="margin-bottom: 10px;">
+                        <ul style="list-style: none; padding-left: 52px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(231,76,60,0.05), rgba(231,76,60,0.1)); border-radius: 8px; border-left: 3px solid #e74c3c;">
                                 <strong>Регистрация:</strong> При обращении клиента менеджер создает задачу на доске "Рекламации" с описанием проблемы и фотофиксацией.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(231,76,60,0.05), rgba(231,76,60,0.1)); border-radius: 8px; border-left: 3px solid #e74c3c;">
                                 <strong>Анализ:</strong> Определяются причины, назначаются ответственные. Задачи по устранению автоматически добавляются в план-график производства.
                             </li>
-                            <li style="margin-bottom: 10px;">
+                            <li style="margin-bottom: 12px; padding: 12px; background: linear-gradient(135deg, rgba(231,76,60,0.05), rgba(231,76,60,0.1)); border-radius: 8px; border-left: 3px solid #e74c3c;">
                                 <strong>Исполнение:</strong> Работы по устранению отслеживаются через систему.
                             </li>
                         </ul>
                     </div>
                     
-                    <div style="background: #f0f8ff; border-left: 4px solid #4a90e2; padding: 20px; border-radius: 4px; margin-top: 30px;">
-                        <strong style="color: #2980b9;">Ключевые преимущества системы:</strong>
-                        <ul style="margin-top: 10px; padding-left: 20px;">
-                            <li>Полная прослеживаемость заказа от заявки до монтажа</li>
-                            <li>Автоматизация рутинных операций и напоминаний</li>
-                            <li>Единое информационное пространство для всех участников</li>
-                            <li>Контроль сроков и финансов в режиме реального времени</li>
-                            <li>Интеграция с мессенджерами для оперативной коммуникации</li>
-                            <li>Интеграция с мессенджерами для оперативной коммуникации</li>
+                    <div style="background: linear-gradient(135deg, #e8f4fd, #f0f8ff); border-left: 5px solid #4a90e2; padding: 25px; border-radius: 10px; margin-top: 35px;">
+                        <strong style="color: #2980b9; font-size: 18px;">Ключевые преимущества системы:</strong>
+                        <ul style="margin-top: 15px; padding-left: 20px; list-style: none;">
+                            <li style="margin-bottom: 10px;">✓ Полная прослеживаемость заказа от заявки до монтажа</li>
+                            <li style="margin-bottom: 10px;">✓ Автоматизация рутинных операций и напоминаний</li>
+                            <li style="margin-bottom: 10px;">✓ Единое информационное пространство для всех участников</li>
+                            <li style="margin-bottom: 10px;">✓ Контроль сроков и финансов в режиме реального времени</li>
+                            <li style="margin-bottom: 10px;">✓ Интеграция с мессенджерами для оперативной коммуникации</li>
                         </ul>
                     </div>
                 </div>
@@ -1755,6 +2288,26 @@
             
             modal.appendChild(modalContent);
             document.body.appendChild(modal);
+            
+            // Добавляем стили для анимаций модального окна
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fadeIn {
+                    from { opacity: 0; }
+                    to { opacity: 1; }
+                }
+                @keyframes slideUp {
+                    from { 
+                        opacity: 0;
+                        transform: translateY(50px);
+                    }
+                    to { 
+                        opacity: 1;
+                        transform: translateY(0);
+                    }
+                }
+            `;
+            document.head.appendChild(style);
             
             // Закрытие по клику вне окна
             modal.addEventListener('click', function(e) {
@@ -1793,6 +2346,48 @@
             tableRows.forEach(row => {
                 row.style.cursor = 'pointer';
             });
+            
+            // Добавляем плавное появление элементов
+            const elements = document.querySelectorAll('.card, .kanban-board, .benefits-block');
+            elements.forEach((el, index) => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(20px)';
+                setTimeout(() => {
+                    el.style.transition = 'all 0.5s ease';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, index * 100);
+            });
+        });
+        
+        // Добавление параллакс эффекта для блоков преимуществ
+        window.addEventListener('scroll', function() {
+            const scrolled = window.pageYOffset;
+            const shapes = document.querySelectorAll('.benefits-shape');
+            shapes.forEach(shape => {
+                const speed = shape.getAttribute('data-speed') || 0.5;
+                shape.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.02}deg)`;
+            });
+        });
+        
+        // Анимация прогресс баров при появлении в viewport
+        const progressObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const progressBar = entry.target.querySelector('.progress-fill');
+                    if (progressBar) {
+                        const width = progressBar.style.width;
+                        progressBar.style.width = '0';
+                        setTimeout(() => {
+                            progressBar.style.width = width;
+                        }, 100);
+                    }
+                }
+            });
+        }, { threshold: 0.5 });
+        
+        document.querySelectorAll('.progress-bar').forEach(bar => {
+            progressObserver.observe(bar);
         });
     </script>
 </body>
